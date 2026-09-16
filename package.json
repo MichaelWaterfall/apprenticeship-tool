@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MichaelWaterfall/apprenticeship-tool#readme",
   "dependencies": {
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "playwright": "^1.63.0"
   }
 }

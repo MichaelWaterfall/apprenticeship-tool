@@ -1,3 +1,8 @@
+require("dotenv").config();
+
+const API_URL =
+  "https://api.apprenticeships.education.gov.uk/vacancies/vacancy";
+
 async function findApprenticeships() {
   try {
     console.log("Searching all apprenticeships...\n");
@@ -102,3 +107,4 @@ async function findApprenticeships() {
 
   }
 }
+findApprenticeships();
