@@ -19,6 +19,7 @@
   "homepage": "https://github.com/MichaelWaterfall/apprenticeship-tool#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
+    "openai": "^7.19.0",
     "playwright": "^1.63.0"
   }
 }

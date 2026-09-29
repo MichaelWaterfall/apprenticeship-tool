@@ -1,13 +1,31 @@
 const { chromium } = require("playwright");
 const fs = require("fs");
 
-const AUTH_FILE = "playwright/.auth/govuk.json";
+const {
+  findVacancy,
+} = require("../finder");
+
+const {
+  generateApplicationAnswers,
+  printPreview,
+} = require("../answerGenerator");
+
+const AUTH_FILE =
+  "playwright/.auth/govuk.json";
+
+// ==================================================
+// WAIT FOR ENTER
+// ==================================================
 
 function waitForEnter() {
   return new Promise((resolve) => {
     process.stdin.once("data", resolve);
   });
 }
+
+// ==================================================
+// APPLICATION BUTTON
+// ==================================================
 
 function getApplicationControl(page) {
   return page
@@ -17,444 +35,829 @@ function getApplicationControl(page) {
     .first();
 }
 
-// ---------------------------------------
-// INSPECT ONE WRITTEN QUESTION PAGE
-// ---------------------------------------
+// ==================================================
+// VACANCY REFERENCE
+// ==================================================
 
-async function inspectQuestionPage(page, number) {
-  console.log("\n");
-  console.log("##################################################");
-  console.log(`QUESTION ${number}`);
-  console.log("##################################################");
+function normaliseVacancyReference(reference) {
+  if (!reference) {
+    return "";
+  }
 
-  console.log(`PAGE TITLE: ${await page.title()}`);
-  console.log(`PAGE URL:   ${page.url()}`);
+  return String(reference)
+    .trim()
+    .replace(/^VAC/i, "");
+}
 
-  // ---------------------------------------
-  // HEADINGS
-  // ---------------------------------------
+function getVacancyReferenceFromUrl(vacancyUrl) {
+  try {
+    const url =
+      new URL(vacancyUrl);
 
-  console.log("\nHEADINGS:");
+    const parts =
+      url.pathname
+        .split("/")
+        .filter(Boolean);
 
-  const headings = page.locator("h1, h2, h3");
-  const headingCount = await headings.count();
+    const referenceIndex =
+      parts.findIndex(
+        (part) =>
+          part.toLowerCase() ===
+          "reference"
+      );
 
-  for (let i = 0; i < headingCount; i++) {
-    const heading = headings.nth(i);
+    if (
+      referenceIndex !== -1 &&
+      parts[referenceIndex + 1]
+    ) {
+      return normaliseVacancyReference(
+        parts[referenceIndex + 1]
+      );
+    }
 
+    const match =
+      vacancyUrl.match(
+        /(?:VAC)?(\d{6,})/i
+      );
+
+    if (match) {
+      return normaliseVacancyReference(
+        match[1]
+      );
+    }
+
+    return "";
+  } catch {
+    return "";
+  }
+}
+
+// ==================================================
+// QUESTION TEXT
+// ==================================================
+
+async function getQuestionText(page) {
+  const heading =
+    page.locator("h1").first();
+
+  if (await heading.count()) {
     const text = (
-      await heading.innerText().catch(() => "")
+      await heading
+        .innerText()
+        .catch(() => "")
     )
       .replace(/\s+/g, " ")
       .trim();
 
     if (text) {
-      console.log(`  ${i + 1}. "${text}"`);
+      return text;
     }
   }
 
-  // ---------------------------------------
-  // LABELS
-  // ---------------------------------------
+  const textarea =
+    page.locator("textarea").first();
 
-  console.log("\nLABELS:");
-
-  const labels = page.locator("label");
-  const labelCount = await labels.count();
-
-  console.log(`Found ${labelCount}`);
-
-  for (let i = 0; i < labelCount; i++) {
-    const label = labels.nth(i);
-
-    const text = (
-      await label.innerText().catch(() => "")
-    )
-      .replace(/\s+/g, " ")
-      .trim();
-
-    const forAttribute =
-      await label.getAttribute("for");
-
-    console.log(
-      `  ${i + 1}. "${text}" for="${forAttribute || ""}"`
-    );
-  }
-
-  // ---------------------------------------
-  // TEXTAREAS
-  // ---------------------------------------
-
-  console.log("\nTEXTAREAS:");
-
-  const textareas = page.locator("textarea");
-  const textareaCount = await textareas.count();
-
-  console.log(`Found ${textareaCount}`);
-
-  for (let i = 0; i < textareaCount; i++) {
-    const textarea = textareas.nth(i);
-
+  if (await textarea.count()) {
     const id =
-      (await textarea.getAttribute("id")) || "";
-
-    const name =
-      (await textarea.getAttribute("name")) || "";
-
-    const maxlength =
-      (await textarea.getAttribute("maxlength")) || "";
-
-    const ariaDescribedBy =
-      (await textarea.getAttribute("aria-describedby")) || "";
-
-    const existingValue =
-      await textarea.inputValue();
-
-    console.log(`\n  TEXTAREA ${i + 1}`);
-
-    console.log(`    id="${id}"`);
-    console.log(`    name="${name}"`);
-    console.log(`    maxlength="${maxlength}"`);
-
-    console.log(
-      `    aria-describedby="${ariaDescribedBy}"`
-    );
-
-    console.log(
-      `    existing answer length=${existingValue.length}`
-    );
-
-    if (existingValue.length > 0) {
-      console.log(
-        `    existing answer="${existingValue}"`
+      await textarea.getAttribute(
+        "id"
       );
-    } else {
-      console.log(
-        "    existing answer=(empty)"
-      );
+
+    if (id) {
+      const label =
+        page.locator(
+          `label[for="${id}"]`
+        );
+
+      if (await label.count()) {
+        const text = (
+          await label
+            .first()
+            .innerText()
+            .catch(() => "")
+        )
+          .replace(/\s+/g, " ")
+          .trim();
+
+        if (text) {
+          return text;
+        }
+      }
     }
   }
 
-  // ---------------------------------------
-  // HINTS / CHARACTER COUNTERS
-  // ---------------------------------------
+  return "";
+}
 
-  console.log("\nHINTS / CHARACTER INFORMATION:");
+// ==================================================
+// QUESTION LINKS
+// ==================================================
 
-  const possibleHints = page.locator(
-    [
-      ".govuk-hint",
-      ".govuk-character-count__message",
-      "[id*='hint']",
-      "[id*='info']",
-    ].join(", ")
+async function getQuestionLinks(
+  page,
+  overviewUrl
+) {
+  const locator =
+    page.locator(
+      [
+        'a[href*="/skillsandstrengths"]',
+        'a[href*="/what-interests-you"]',
+        'a[href*="/additional-question/"]',
+      ].join(", ")
+    );
+
+  const count =
+    await locator.count();
+
+  const links = [];
+
+  for (
+    let i = 0;
+    i < count;
+    i++
+  ) {
+    const link =
+      locator.nth(i);
+
+    const href =
+      await link.getAttribute(
+        "href"
+      );
+
+    if (!href) {
+      continue;
+    }
+
+    links.push({
+      absoluteUrl:
+        new URL(
+          href,
+          overviewUrl
+        ).toString(),
+    });
+  }
+
+  return links;
+}
+
+// ==================================================
+// READ QUESTIONS
+// ==================================================
+
+async function readQuestions(
+  page,
+  questionLinks
+) {
+  const questions = [];
+
+  console.log(
+    "\n========================================"
   );
 
-  const hintCount =
-    await possibleHints.count();
+  console.log(
+    "READING APPLICATION QUESTIONS"
+  );
 
-  console.log(`Found ${hintCount}`);
+  console.log(
+    "========================================\n"
+  );
 
-  for (let i = 0; i < hintCount; i++) {
-    const hint = possibleHints.nth(i);
+  for (
+    let i = 0;
+    i < questionLinks.length;
+    i++
+  ) {
+    console.log(
+      `Opening question ${i + 1}...`
+    );
 
-    const text = (
-      await hint.innerText().catch(() => "")
-    )
-      .replace(/\s+/g, " ")
-      .trim();
+    await page.goto(
+      questionLinks[i].absoluteUrl,
+      {
+        waitUntil:
+          "domcontentloaded",
+      }
+    );
 
-    if (text) {
-      console.log(`  "${text}"`);
+    const questionText =
+      await getQuestionText(page);
+
+    if (!questionText) {
+      throw new Error(
+        `Could not determine question ${i + 1}.`
+      );
+    }
+
+    const textareaCount =
+      await page
+        .locator("textarea")
+        .count();
+
+    if (textareaCount === 0) {
+      throw new Error(
+        `Question ${i + 1} has no textarea. Stopping safely.`
+      );
+    }
+
+    questions.push(
+      questionText
+    );
+
+    console.log(
+      `${i + 1}. ${questionText}`
+    );
+  }
+
+  return questions;
+}
+
+// ==================================================
+// SELECT "SECTION COMPLETE"
+// ==================================================
+
+async function markSectionComplete(page) {
+  // We have observed both names on
+  // Find an apprenticeship.
+  const selectors = [
+    'input[name="IsSectionComplete"][value="true"]',
+    'input[name="IsSectionCompleted"][value="true"]',
+  ];
+
+  for (
+    const selector of selectors
+  ) {
+    const radio =
+      page.locator(selector);
+
+    if (await radio.count()) {
+      await radio.first().check();
+
+      return;
     }
   }
 
-  // ---------------------------------------
-  // BUTTONS
-  // ---------------------------------------
+  throw new Error(
+    "Could not find the 'section complete' control."
+  );
+}
 
-  console.log("\nBUTTONS:");
+// ==================================================
+// CONTINUE BUTTON
+// ==================================================
 
-  const buttons = page.getByRole("button");
-  const buttonCount = await buttons.count();
+async function clickContinue(page) {
+  const button =
+    page
+      .getByRole(
+        "button",
+        {
+          name: /^continue$/i,
+        }
+      )
+      .first();
 
-  console.log(`Found ${buttonCount}`);
+  if (
+    !(await button.count())
+  ) {
+    throw new Error(
+      "Could not find the Continue button."
+    );
+  }
 
-  for (let i = 0; i < buttonCount; i++) {
-    const button = buttons.nth(i);
+  await button.click();
 
-    const text = (
-      await button.innerText().catch(() => "")
-    )
+  await page.waitForLoadState(
+    "domcontentloaded"
+  );
+}
+
+// ==================================================
+// FILL ONE QUESTION
+// ==================================================
+
+async function fillQuestion({
+  page,
+  questionLink,
+  result,
+}) {
+  console.log(
+    `\nQuestion ${result.questionNumber}: ${result.question}`
+  );
+
+  if (
+    result.status !== "ready"
+  ) {
+    console.log(
+      "MANUAL REVIEW — leaving this question unchanged."
+    );
+
+    console.log(
+      `Reason: ${result.reviewReason}`
+    );
+
+    return false;
+  }
+
+  await page.goto(
+    questionLink.absoluteUrl,
+    {
+      waitUntil:
+        "domcontentloaded",
+    }
+  );
+
+  // ----------------------------------------------
+  // SAFETY CHECK:
+  // Verify the page is still the question we expect.
+  // ----------------------------------------------
+
+  const liveQuestion =
+    await getQuestionText(page);
+
+  const expectedQuestion =
+    result.question
       .replace(/\s+/g, " ")
       .trim();
 
-    console.log(`  ${i + 1}. "${text}"`);
+  const actualQuestion =
+    liveQuestion
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (
+    expectedQuestion !==
+    actualQuestion
+  ) {
+    throw new Error(
+      `Question mismatch. Expected "${expectedQuestion}" but page contains "${actualQuestion}".`
+    );
   }
 
-  // ---------------------------------------
-  // COMPLETION RADIOS
-  // ---------------------------------------
+  // ----------------------------------------------
+  // TEXTAREA
+  // ----------------------------------------------
 
-  console.log("\nRADIO BUTTONS:");
+  const textareas =
+    page.locator("textarea");
 
-  const radios = page.locator(
-    'input[type="radio"]'
+  const textareaCount =
+    await textareas.count();
+
+  if (
+    textareaCount !== 1
+  ) {
+    throw new Error(
+      `Expected exactly one textarea for question ${result.questionNumber}, but found ${textareaCount}.`
+    );
+  }
+
+  const textarea =
+    textareas.first();
+
+  // ----------------------------------------------
+  // FILL ANSWER
+  // ----------------------------------------------
+
+  await textarea.fill(
+    result.answer
   );
 
-  const radioCount = await radios.count();
+  // Verify Playwright actually put the
+  // complete answer into the field.
+  const enteredValue =
+    await textarea.inputValue();
 
-  console.log(`Found ${radioCount}`);
+  if (
+    enteredValue !==
+    result.answer
+  ) {
+    throw new Error(
+      `Answer verification failed for question ${result.questionNumber}.`
+    );
+  }
 
-  for (let i = 0; i < radioCount; i++) {
-    const radio = radios.nth(i);
+  // ----------------------------------------------
+  // COMPLETE SECTION
+  // ----------------------------------------------
 
-    console.log(`  RADIO ${i + 1}`);
+  await markSectionComplete(
+    page
+  );
 
-    console.log(
-      `    id="${(await radio.getAttribute("id")) || ""}"`
+  // ----------------------------------------------
+  // SAVE VIA CONTINUE
+  // ----------------------------------------------
+
+  await clickContinue(
+    page
+  );
+
+  console.log(
+    `Saved question ${result.questionNumber}.`
+  );
+
+  return true;
+}
+
+// ==================================================
+// MAIN
+// ==================================================
+
+async function fillApplication(
+  vacancyUrl
+) {
+  if (
+    !fs.existsSync(
+      AUTH_FILE
+    )
+  ) {
+    throw new Error(
+      `No saved login session found at ${AUTH_FILE}`
+    );
+  }
+
+  const vacancyReference =
+    getVacancyReferenceFromUrl(
+      vacancyUrl
     );
 
-    console.log(
-      `    name="${(await radio.getAttribute("name")) || ""}"`
-    );
-
-    console.log(
-      `    value="${(await radio.getAttribute("value")) || ""}"`
-    );
-
-    console.log(
-      `    checked=${await radio.isChecked()}`
+  if (!vacancyReference) {
+    throw new Error(
+      "Could not extract vacancy reference from URL."
     );
   }
 
   console.log(
-    "\n*** Nothing has been changed on this question. ***"
+    "========================================"
   );
-}
 
-// ---------------------------------------
-// MAIN
-// ---------------------------------------
+  console.log(
+    "GOV.UK FILL-ONLY TEST"
+  );
 
-async function inspectQuestions(vacancyUrl) {
-  if (!fs.existsSync(AUTH_FILE)) {
-    console.error(
-      "No saved login session found."
+  console.log(
+    "========================================"
+  );
+
+  console.log(
+    `\nVacancy reference: ${vacancyReference}`
+  );
+
+  // ------------------------------------------------
+  // GET VACANCY
+  // ------------------------------------------------
+
+  console.log(
+    "\nGetting full vacancy information..."
+  );
+
+  const vacancy =
+    await findVacancy({
+      vacancyReference,
+    });
+
+  if (!vacancy) {
+    throw new Error(
+      `Could not find vacancy ${vacancyReference}.`
     );
-
-    console.error(
-      `Expected: ${AUTH_FILE}`
-    );
-
-    process.exit(1);
   }
 
-  const browser = await chromium.launch({
-    headless: false,
-  });
+  console.log(
+    `Found: ${vacancy.title}`
+  );
 
-  const context = await browser.newContext({
-    storageState: AUTH_FILE,
-  });
+  console.log(
+    `Employer: ${vacancy.employerName}`
+  );
 
-  const page = await context.newPage();
+  // ------------------------------------------------
+  // BROWSER
+  // ------------------------------------------------
 
-  // ---------------------------------------
-  // OPEN VACANCY
-  // ---------------------------------------
+  const browser =
+    await chromium.launch({
+      headless: false,
+    });
 
-  console.log("Opening vacancy...");
+  const context =
+    await browser.newContext({
+      storageState:
+        AUTH_FILE,
+    });
 
-  await page.goto(vacancyUrl, {
-    waitUntil: "domcontentloaded",
-  });
-
-  let applicationControl =
-    getApplicationControl(page);
+  const page =
+    await context.newPage();
 
   try {
-    await applicationControl.waitFor({
-      state: "visible",
-      timeout: 5000,
-    });
-  } catch {
-    console.log("\nSign in manually if required.");
+    // ----------------------------------------------
+    // VACANCY PAGE
+    // ----------------------------------------------
 
     console.log(
-      "Complete phone verification if requested."
+      "\nOpening vacancy..."
+    );
+
+    await page.goto(
+      vacancyUrl,
+      {
+        waitUntil:
+          "domcontentloaded",
+      }
+    );
+
+    let applicationControl =
+      getApplicationControl(
+        page
+      );
+
+    try {
+      await applicationControl.waitFor({
+        state: "visible",
+        timeout: 5000,
+      });
+    } catch {
+      console.log(
+        "\nSign in manually if required."
+      );
+
+      console.log(
+        "Complete phone verification if requested."
+      );
+
+      console.log(
+        "Return to the vacancy page and press ENTER here."
+      );
+
+      await waitForEnter();
+
+      await context.storageState({
+        path: AUTH_FILE,
+      });
+
+      await page.goto(
+        vacancyUrl,
+        {
+          waitUntil:
+            "domcontentloaded",
+        }
+      );
+
+      applicationControl =
+        getApplicationControl(
+          page
+        );
+
+      await applicationControl.waitFor({
+        state: "visible",
+        timeout: 15000,
+      });
+    }
+
+    // ----------------------------------------------
+    // APPLICATION OVERVIEW
+    // ----------------------------------------------
+
+    console.log(
+      "\nOpening application..."
+    );
+
+    await applicationControl.click();
+
+    await page.waitForTimeout(
+      1000
+    );
+
+    const overviewUrl =
+      page.url();
+
+    console.log(
+      `Application overview: ${overviewUrl}`
+    );
+
+    // ----------------------------------------------
+    // DISCOVER QUESTIONS
+    // ----------------------------------------------
+
+    const questionLinks =
+      await getQuestionLinks(
+        page,
+        overviewUrl
+      );
+
+    console.log(
+      `\nFound ${questionLinks.length} written question(s).`
+    );
+
+    if (
+      questionLinks.length === 0
+    ) {
+      throw new Error(
+        "No supported written questions were found."
+      );
+    }
+
+    // ----------------------------------------------
+    // READ QUESTIONS
+    // ----------------------------------------------
+
+    const questions =
+      await readQuestions(
+        page,
+        questionLinks
+      );
+
+    // ----------------------------------------------
+    // GENERATE
+    // ----------------------------------------------
+
+    console.log(
+      "\n========================================"
     );
 
     console.log(
-      "When you are back on the vacancy page, press ENTER."
+      "GENERATING ANSWERS"
     );
 
-    await waitForEnter();
+    console.log(
+      "========================================\n"
+    );
+
+    const results =
+      await generateApplicationAnswers({
+        questions,
+        vacancy,
+      });
+
+    // ----------------------------------------------
+    // SHOW PREVIEW BEFORE MODIFYING APPLICATION
+    // ----------------------------------------------
+
+    printPreview(
+      results
+    );
+
+    const manualReviews =
+      results.filter(
+        (result) =>
+          result.status ===
+          "manual_review"
+      );
+
+    if (
+      manualReviews.length > 0
+    ) {
+      console.log(
+        "\n========================================"
+      );
+
+      console.log(
+        "MANUAL REVIEW REQUIRED"
+      );
+
+      console.log(
+        "========================================"
+      );
+
+      console.log(
+        `\n${manualReviews.length} answer(s) require manual review.`
+      );
+
+      console.log(
+        "For safety, NO generated answers will be written during this run."
+      );
+
+      await page.goto(
+        overviewUrl,
+        {
+          waitUntil:
+            "domcontentloaded",
+        }
+      );
+
+      console.log(
+        "\nBrowser will remain open for 5 minutes."
+      );
+
+      await page.waitForTimeout(
+        300000
+      );
+
+      return;
+    }
+
+    // ----------------------------------------------
+    // FILL QUESTIONS
+    // ----------------------------------------------
+
+    console.log(
+      "\n========================================"
+    );
+
+    console.log(
+      "FILLING WRITTEN ANSWERS"
+    );
+
+    console.log(
+      "========================================"
+    );
+
+    let savedCount = 0;
+
+    for (
+      let i = 0;
+      i < results.length;
+      i++
+    ) {
+      const saved =
+        await fillQuestion({
+          page,
+          questionLink:
+            questionLinks[i],
+          result:
+            results[i],
+        });
+
+      if (saved) {
+        savedCount++;
+      }
+    }
+
+    // ----------------------------------------------
+    // RETURN TO OVERVIEW
+    // ----------------------------------------------
+
+    await page.goto(
+      overviewUrl,
+      {
+        waitUntil:
+          "domcontentloaded",
+      }
+    );
+
+    // ----------------------------------------------
+    // SAVE LOGIN SESSION
+    // ----------------------------------------------
 
     await context.storageState({
       path: AUTH_FILE,
     });
 
-    await page.goto(vacancyUrl, {
-      waitUntil: "domcontentloaded",
-    });
-
-    applicationControl =
-      getApplicationControl(page);
-
-    await applicationControl.waitFor({
-      state: "visible",
-      timeout: 15000,
-    });
-  }
-
-  // ---------------------------------------
-  // OPEN APPLICATION
-  // ---------------------------------------
-
-  console.log("\nOpening application...");
-
-  await applicationControl.click();
-
-  await page.waitForTimeout(1000);
-
-  const overviewUrl = page.url();
-
-  console.log(
-    `Application overview: ${overviewUrl}`
-  );
-
-  // ---------------------------------------
-  // FIND TAILORED QUESTION LINKS
-  // ---------------------------------------
-
-  const questionLinks = page.locator(
-    [
-      'a[href*="/skillsandstrengths"]',
-      'a[href*="/what-interests-you"]',
-      'a[href*="/additional-question/"]',
-    ].join(", ")
-  );
-
-  const questionCount =
-    await questionLinks.count();
-
-  console.log("\n========================================");
-  console.log("TAILORED QUESTIONS FOUND");
-  console.log("========================================");
-
-  console.log(
-    `\nFound ${questionCount} question link(s).\n`
-  );
-
-  // Save the links before navigating away.
-  const questions = [];
-
-  for (let i = 0; i < questionCount; i++) {
-    const link = questionLinks.nth(i);
-
-    const text = (
-      await link.innerText()
-    )
-      .replace(/\s+/g, " ")
-      .trim();
-
-    const href =
-      await link.getAttribute("href");
-
-    questions.push({
-      text,
-      href,
-    });
-
-    console.log(`${i + 1}. ${text}`);
-    console.log(`   ${href}`);
-  }
-
-  // ---------------------------------------
-  // INSPECT EACH QUESTION
-  // ---------------------------------------
-
-  for (let i = 0; i < questions.length; i++) {
-    const question = questions[i];
-
-    console.log("\n\n========================================");
-    console.log(`OPENING QUESTION ${i + 1}`);
-    console.log("========================================");
+    // ----------------------------------------------
+    // STOP — NO FINAL SUBMISSION
+    // ----------------------------------------------
 
     console.log(
-      `Overview link text: "${question.text}"`
+      "\n========================================"
     );
 
-    if (!question.href) {
-      console.log(
-        "No href found - skipping."
-      );
-
-      continue;
-    }
-
-    const absoluteUrl = new URL(
-      question.href,
-      overviewUrl
-    ).toString();
-
-    await page.goto(absoluteUrl, {
-      waitUntil: "domcontentloaded",
-    });
-
-    await inspectQuestionPage(
-      page,
-      i + 1
+    console.log(
+      "FILL-ONLY TEST COMPLETE"
     );
+
+    console.log(
+      "========================================"
+    );
+
+    console.log(
+      `\nSaved ${savedCount}/${results.length} written answers.`
+    );
+
+    console.log(
+      "\nThe browser is now on the application overview."
+    );
+
+    console.log(
+      "FINAL SUBMISSION HAS NOT BEEN PERFORMED."
+    );
+
+    console.log(
+      "Inspect the application manually."
+    );
+
+    console.log(
+      "\nBrowser will remain open for 5 minutes."
+    );
+
+    await page.waitForTimeout(
+      300000
+    );
+  } finally {
+    await context
+      .storageState({
+        path: AUTH_FILE,
+      })
+      .catch(() => {});
+
+    await browser.close();
   }
-
-  // ---------------------------------------
-  // RETURN TO OVERVIEW
-  // ---------------------------------------
-
-  await page.goto(overviewUrl, {
-    waitUntil: "domcontentloaded",
-  });
-
-  // ---------------------------------------
-  // SAVE SESSION
-  // ---------------------------------------
-
-  await context.storageState({
-    path: AUTH_FILE,
-  });
-
-  console.log("\n\n========================================");
-  console.log("QUESTION INSPECTION COMPLETE");
-  console.log("========================================");
-
-  console.log(
-    "\nNo written answers were changed."
-  );
-
-  console.log(
-    "The application was NOT submitted."
-  );
-
-  console.log(
-    "\nBrowser will remain open for 5 minutes."
-  );
-
-  await page.waitForTimeout(300000);
-
-  await context.storageState({
-    path: AUTH_FILE,
-  });
-
-  await browser.close();
 }
 
-// ---------------------------------------
-// VACANCY URL
-// ---------------------------------------
+// ==================================================
+// COMMAND LINE
+// ==================================================
 
-const vacancyUrl = process.argv[2];
+const vacancyUrl =
+  process.argv[2];
 
 if (!vacancyUrl) {
   console.error(
@@ -464,12 +867,14 @@ if (!vacancyUrl) {
   process.exit(1);
 }
 
-inspectQuestions(vacancyUrl).catch(
-  (error) => {
-    console.error(
-      "\nQuestion inspection failed:"
-    );
+fillApplication(
+  vacancyUrl
+).catch((error) => {
+  console.error(
+    "\nFill-only test failed:"
+  );
 
-    console.error(error);
-  }
-);
+  console.error(error);
+
+  process.exitCode = 1;
+});
