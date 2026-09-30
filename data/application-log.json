@@ -1,0 +1,18 @@
+[
+  {
+    "vacancyReference": "2000054368",
+    "vacancyTitle": "Engineering Apprentice",
+    "employerName": "S S S GEARS LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T13:03:23.299Z"
+  },
+  {
+    "vacancyReference": "2000054368",
+    "vacancyTitle": "Engineering Apprentice",
+    "employerName": "S S S GEARS LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/42c84c08-49f8-4f02-88f9-66f9c536ada9/application-submitted",
+    "timestamp": "2026-09-30T13:03:24.583Z"
+  }
+]

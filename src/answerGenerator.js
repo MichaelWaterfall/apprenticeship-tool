@@ -41,7 +41,7 @@ function countWords(text) {
 }
 
 // ==================================================
-// REMOVE HTML FROM API TEXT
+// STRIP HTML
 // ==================================================
 
 function stripHtml(value) {
@@ -66,7 +66,7 @@ function stripHtml(value) {
 }
 
 // ==================================================
-// NORMALISE ADDRESS
+// NORMALISE ADDRESSES
 // ==================================================
 
 function normaliseAddresses(addresses) {
@@ -74,26 +74,30 @@ function normaliseAddresses(addresses) {
     return [];
   }
 
-  return addresses.map((address) => ({
-    addressLine1:
-      address.addressLine1 || "",
+  return addresses.map(
+    (address) => ({
+      addressLine1:
+        address.addressLine1 || "",
 
-    addressLine2:
-      address.addressLine2 || "",
+      addressLine2:
+        address.addressLine2 || "",
 
-    addressLine3:
-      address.addressLine3 || "",
+      addressLine3:
+        address.addressLine3 || "",
 
-    postcode:
-      address.postcode || "",
-  }));
+      postcode:
+        address.postcode || "",
+    })
+  );
 }
 
 // ==================================================
 // NORMALISE VACANCY
 // ==================================================
 
-function normaliseVacancy(vacancy = {}) {
+function normaliseVacancy(
+  vacancy = {}
+) {
   return {
     vacancyReference:
       vacancy.vacancyReference || "",
@@ -153,27 +157,34 @@ function normaliseVacancy(vacancy = {}) {
       vacancy.course
         ? {
             title:
-              vacancy.course.title || "",
+              vacancy.course.title ||
+              "",
 
             level:
-              vacancy.course.level || null,
+              vacancy.course.level ||
+              null,
 
             route:
-              vacancy.course.route || "",
+              vacancy.course.route ||
+              "",
 
             type:
-              vacancy.course.type || "",
+              vacancy.course.type ||
+              "",
           }
         : null,
 
     apprenticeshipLevel:
-      vacancy.apprenticeshipLevel || "",
+      vacancy.apprenticeshipLevel ||
+      "",
 
     provider:
       vacancy.providerName || "",
 
     skills:
-      Array.isArray(vacancy.skills)
+      Array.isArray(
+        vacancy.skills
+      )
         ? vacancy.skills
         : [],
 
@@ -188,13 +199,16 @@ function normaliseVacancy(vacancy = {}) {
       vacancy.wage || null,
 
     hoursPerWeek:
-      vacancy.hoursPerWeek || null,
+      vacancy.hoursPerWeek ||
+      null,
 
     expectedDuration:
-      vacancy.expectedDuration || "",
+      vacancy.expectedDuration ||
+      "",
 
     numberOfPositions:
-      vacancy.numberOfPositions || null,
+      vacancy.numberOfPositions ||
+      null,
 
     startDate:
       vacancy.startDate || "",
@@ -261,6 +275,154 @@ If a question genuinely cannot be answered from the
 available information, mark it for manual review.
 
 ==================================================
+FACTUAL PRECISION
+==================================================
+
+Do not infer an outcome merely because the applicant
+performed an action.
+
+For example, if the profile says:
+
+"Checked the cog and chute"
+
+you may say:
+
+"I checked the cog and chute."
+
+Do NOT turn this into:
+
+"I checked the cog and chute and confirmed there was
+no further damage."
+
+unless that result is explicitly supported.
+
+Similarly, if the profile says:
+
+"Tested the machine to make sure it was working
+correctly"
+
+you may say:
+
+"I tested the machine to make sure it was working
+correctly."
+
+Do NOT change this into unsupported outcomes such as:
+
+- "I returned the machine to service."
+- "The machine was successfully returned to use."
+- "I confirmed there was no damage."
+- "The repair permanently resolved the fault."
+
+Preserve the distinction between:
+
+- what the applicant did;
+- why they did it;
+- and what the verified evidence says happened.
+
+Do not add a successful outcome simply because one
+would normally be expected.
+
+Do not strengthen uncertain or limited evidence into a
+more definite claim.
+
+When describing an example from the verified profile,
+stay as close as reasonably possible to the facts that
+are actually recorded.
+
+==================================================
+NO INVENTED PROCESS STEPS
+==================================================
+
+When using a concrete example from the applicant
+profile, do not add plausible-sounding actions that are
+not explicitly supported.
+
+You may naturally paraphrase a verified action, but you
+must not introduce an additional action or process
+step.
+
+For example, if the verified example says the
+applicant:
+
+- investigated a fault methodically;
+- dismantled the relevant mechanism;
+- found a blockage;
+- removed the blockage;
+- checked the cog and chute;
+- reassembled the mechanism;
+- reset the machine;
+- tested the machine;
+
+then restrict the factual description of what the
+applicant DID to those supported actions.
+
+Do NOT embellish the example with unsupported actions
+such as:
+
+- "I kept track of each stage."
+- "I documented each step."
+- "I recorded my findings."
+- "I double-checked every component."
+- "I inspected the rest of the machine."
+- "I followed the manufacturer's procedure."
+- "I followed the technical manual."
+- "I carried out a safety inspection."
+- "I reported the fault to my manager."
+- "I asked a colleague for advice."
+- "I isolated the power supply."
+- "I replaced damaged components."
+- "I carried out preventative maintenance."
+
+unless the verified profile explicitly supports that
+specific action.
+
+Do not add an action simply because it would be normal,
+sensible, safe or professional in that situation.
+
+This rule is especially important for questions asking
+the applicant to describe a specific example.
+
+For a specific example, factual accuracy is more
+important than making the story sound more impressive.
+
+You MAY explain what a supported example demonstrates.
+
+For example:
+
+"The experience showed my problem-solving skills and
+the importance of approaching faults methodically."
+
+That is an interpretation of the verified example.
+
+But do not create a new event or action in order to
+demonstrate a skill.
+
+==================================================
+ARCADE MACHINE EXAMPLE
+==================================================
+
+If using the verified Easter Egg Party machine example,
+the supported factual sequence is:
+
+1. The machine developed an Error 18 fault.
+2. The applicant investigated the problem methodically.
+3. The applicant opened and dismantled the relevant
+   part of the mechanism.
+4. The applicant found a broken capsule containing a
+   prize and tickets lodged in the mechanism and
+   causing a blockage.
+5. The applicant removed the blockage.
+6. The applicant checked the cog and chute.
+7. The applicant reassembled the mechanism.
+8. The applicant reset the machine.
+9. The applicant tested the machine to make sure it
+   was working correctly.
+
+Do not add any other repair action or outcome unless it
+is independently supported elsewhere in the verified
+profile.
+
+==================================================
 DRIVING / LOCATION / COMMUTING
 ==================================================
 
@@ -272,7 +434,7 @@ Do not unnecessarily repeat their home town or address.
 The applicant does not currently have a driving
 licence.
 
-Treat this as a private factual constraint.
+Treat this as a factual constraint.
 
 Do NOT volunteer or highlight the lack of a driving
 licence unless:
@@ -306,6 +468,13 @@ Do not invent:
 - accommodation already arranged
 - vehicle access
 - specific transport connections
+
+The applicant may state that they would arrange
+suitable accommodation or local travel before the
+apprenticeship starts.
+
+Do not change that into a claim that accommodation or
+transport has already been arranged.
 
 If answering requires unsupported transport details,
 mark the question for manual review.
@@ -485,7 +654,7 @@ review_reason = a short explanation
 `;
 
 // ==================================================
-// STRUCTURED OUTPUT
+// STRUCTURED OUTPUT SCHEMA
 // ==================================================
 
 const ANSWER_SCHEMA = {
@@ -533,18 +702,22 @@ const ANSWER_SCHEMA = {
           "review_reason",
         ],
 
-        additionalProperties: false,
+        additionalProperties:
+          false,
       },
     },
   },
 
-  required: ["answers"],
+  required: [
+    "answers",
+  ],
 
-  additionalProperties: false,
+  additionalProperties:
+    false,
 };
 
 // ==================================================
-// BUILD PROMPT
+// BUILD APPLICATION PROMPT
 // ==================================================
 
 function buildApplicationPrompt({
@@ -553,7 +726,10 @@ function buildApplicationPrompt({
 }) {
   const numberedQuestions =
     questions.map(
-      (question, index) => ({
+      (
+        question,
+        index
+      ) => ({
         question_number:
           index + 1,
 
@@ -612,6 +788,24 @@ examples are distributed intelligently rather than
 unnecessarily repeated.
 
 Tailor the answers to the actual vacancy information.
+
+Do not infer additional outcomes from the applicant's
+actions.
+
+Only state outcomes that are explicitly supported by
+the verified profile.
+
+When describing a specific event, do not add plausible
+process steps that are absent from the verified
+profile.
+
+For the arcade-machine example in particular, use only
+the factual repair sequence explicitly supplied in the
+profile and system instructions.
+
+You may explain what the verified actions demonstrate,
+but do not invent another action to demonstrate a
+skill.
 `;
 }
 
@@ -623,7 +817,9 @@ function validateQuestions(
   questions
 ) {
   if (
-    !Array.isArray(questions)
+    !Array.isArray(
+      questions
+    )
   ) {
     throw new Error(
       "questions must be an array."
@@ -656,7 +852,7 @@ function validateQuestions(
 }
 
 // ==================================================
-// GENERATE ALL ANSWERS
+// GENERATE APPLICATION ANSWERS
 // ==================================================
 
 async function generateApplicationAnswers({
@@ -690,7 +886,8 @@ async function generateApplicationAnswers({
 
       text: {
         format: {
-          type: "json_schema",
+          type:
+            "json_schema",
 
           name:
             "apprenticeship_application_answers",
@@ -714,9 +911,10 @@ async function generateApplicationAnswers({
   let parsed;
 
   try {
-    parsed = JSON.parse(
-      response.output_text
-    );
+    parsed =
+      JSON.parse(
+        response.output_text
+      );
   } catch (error) {
     throw new Error(
       `Could not parse OpenAI response: ${error.message}`
@@ -734,6 +932,10 @@ async function generateApplicationAnswers({
     );
   }
 
+  // ==================================================
+  // EXACTLY ONE RESULT PER QUESTION
+  // ==================================================
+
   if (
     parsed.answers.length !==
     questions.length
@@ -744,6 +946,10 @@ async function generateApplicationAnswers({
   }
 
   const results = [];
+
+  // ==================================================
+  // VALIDATE RESULTS
+  // ==================================================
 
   for (
     let i = 0;
@@ -768,6 +974,10 @@ async function generateApplicationAnswers({
 
     const originalQuestion =
       questions[i];
+
+    // ------------------------------------------------
+    // MANUAL REVIEW
+    // ------------------------------------------------
 
     if (
       generated.status ===
@@ -797,8 +1007,15 @@ async function generateApplicationAnswers({
       continue;
     }
 
+    // ------------------------------------------------
+    // READY
+    // ------------------------------------------------
+
     const answer =
-      generated.answer.trim();
+      String(
+        generated.answer ||
+        ""
+      ).trim();
 
     if (!answer) {
       throw new Error(
@@ -807,7 +1024,9 @@ async function generateApplicationAnswers({
     }
 
     const wordCount =
-      countWords(answer);
+      countWords(
+        answer
+      );
 
     if (
       wordCount >
@@ -825,7 +1044,8 @@ async function generateApplicationAnswers({
       question:
         originalQuestion,
 
-      status: "ready",
+      status:
+        "ready",
 
       answer,
 
@@ -841,7 +1061,7 @@ async function generateApplicationAnswers({
 }
 
 // ==================================================
-// PREVIEW
+// PRINT PREVIEW
 // ==================================================
 
 function printPreview(
@@ -860,7 +1080,8 @@ function printPreview(
   );
 
   for (
-    const result of results
+    const result of
+    results
   ) {
     console.log(
       `\nQUESTION ${result.questionNumber}`
