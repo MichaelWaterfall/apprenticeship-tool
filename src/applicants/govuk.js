@@ -14,10 +14,6 @@ const {
   printReview,
 } = require("../applicationReviewer");
 
-// ==================================================
-// SETTINGS
-// ==================================================
-
 const AUTH_FILE = "playwright/.auth/govuk.json";
 
 const APPLICATION_LOG_FILE = path.join(
@@ -57,15 +53,19 @@ function normaliseText(value) {
 }
 
 // ==================================================
-// SIGNED-OUT DETECTION
+// SIGNED OUT
 // ==================================================
 
 async function isSignedOut(page) {
-  const signInControl = page.getByText(
-    /^sign in or create an account$/i
-  );
+  const signInControl =
+    page.getByText(
+      /^sign in or create an account$/i
+    );
 
-  return (await signInControl.count()) > 0;
+  return (
+    (await signInControl.count()) >
+    0
+  );
 }
 
 // ==================================================
@@ -73,25 +73,188 @@ async function isSignedOut(page) {
 // ==================================================
 
 async function getApplicationControl(page) {
-  const controlName =
-    /^(apply now|apply for apprenticeship|continue application|continue your application)$/i;
+  // Prefer the real application button.
 
-  // Try links first.
-  const links = page.getByRole("link", {
-    name: controlName,
-  });
+  const applicationButtons =
+    page.getByRole(
+      "button",
+      {
+        name:
+          /^(apply for apprenticeship|apply now|continue application|continue your application)$/i,
+      }
+    );
 
-  if ((await links.count()) > 0) {
-    return links.first();
+  if (
+    (await applicationButtons.count()) >
+    0
+  ) {
+    return applicationButtons.first();
   }
 
-  // Then buttons / submit controls.
-  const buttons = page.getByRole("button", {
-    name: controlName,
-  });
+  // Do NOT include "Apply now" here.
+  // The vacancy page contains an Apply now anchor
+  // which only jumps to #apply.
 
-  if ((await buttons.count()) > 0) {
-    return buttons.first();
+  const applicationLinks =
+    page.getByRole(
+      "link",
+      {
+        name:
+          /^(apply for apprenticeship|continue application|continue your application)$/i,
+      }
+    );
+
+  if (
+    (await applicationLinks.count()) >
+    0
+  ) {
+    return applicationLinks.first();
+  }
+
+  return null;
+}
+
+// ==================================================
+// EXTERNAL APPLICATION DETECTION
+// ==================================================
+
+async function getExternalApplication(
+  page
+) {
+  const applySection =
+    page
+      .locator("#apply")
+      .first();
+
+  if (
+    (await applySection.count()) ===
+    0
+  ) {
+    return null;
+  }
+
+  const currentHost =
+    new URL(
+      page.url()
+    ).hostname;
+
+  // ------------------------------------------------
+  // EXTERNAL LINKS
+  // ------------------------------------------------
+
+  const links =
+    applySection.locator(
+      "a[href]"
+    );
+
+  const linkCount =
+    await links.count();
+
+  for (
+    let i = 0;
+    i < linkCount;
+    i++
+  ) {
+    const link =
+      links.nth(i);
+
+    const href =
+      await link.getAttribute(
+        "href"
+      );
+
+    const text =
+      normaliseText(
+        await link
+          .textContent()
+          .catch(
+            () => ""
+          )
+      );
+
+    if (!href) {
+      continue;
+    }
+
+    let destination;
+
+    try {
+      destination =
+        new URL(
+          href,
+          page.url()
+        );
+    } catch {
+      continue;
+    }
+
+    if (
+      destination.hostname !==
+        currentHost &&
+      /apply/i.test(text)
+    ) {
+      return {
+        type: "link",
+        text,
+        url:
+          destination.href,
+      };
+    }
+  }
+
+  // ------------------------------------------------
+  // EXTERNAL FORMS
+  // ------------------------------------------------
+
+  const forms =
+    applySection.locator(
+      "form[action]"
+    );
+
+  const formCount =
+    await forms.count();
+
+  for (
+    let i = 0;
+    i < formCount;
+    i++
+  ) {
+    const form =
+      forms.nth(i);
+
+    const action =
+      await form.getAttribute(
+        "action"
+      );
+
+    if (!action) {
+      continue;
+    }
+
+    let destination;
+
+    try {
+      destination =
+        new URL(
+          action,
+          page.url()
+        );
+    } catch {
+      continue;
+    }
+
+    if (
+      destination.hostname !==
+      currentHost
+    ) {
+      return {
+        type: "form",
+        text:
+          "External application form",
+        url:
+          destination.href,
+      };
+    }
   }
 
   return null;
@@ -101,38 +264,42 @@ async function getApplicationControl(page) {
 // VACANCY REFERENCE
 // ==================================================
 
-function normaliseVacancyReference(reference) {
-  if (!reference) {
-    return "";
-  }
-
-  return String(reference)
+function normaliseVacancyReference(
+  reference
+) {
+  return String(
+    reference || ""
+  )
     .trim()
-    .replace(/^VAC/i, "");
+    .replace(
+      /^VAC/i,
+      ""
+    );
 }
 
-function getVacancyReferenceFromUrl(vacancyUrl) {
+function getVacancyReferenceFromUrl(
+  vacancyUrl
+) {
   let parsed;
 
   try {
-    parsed = new URL(
-      String(vacancyUrl)
-    );
+    parsed =
+      new URL(
+        String(
+          vacancyUrl
+        )
+      );
   } catch {
     throw new Error(
       "The supplied apprenticeship URL is not valid."
     );
   }
 
-  /*
-    Supports both:
-
-    /apprenticeship/reference/2000054368
-
-    and:
-
-    /apprenticeship/VAC2000053529
-  */
+  // Supports:
+  //
+  // /apprenticeship/reference/2000054368
+  //
+  // /apprenticeship/VAC2000053529
 
   const match =
     parsed.pathname.match(
@@ -151,12 +318,122 @@ function getVacancyReferenceFromUrl(vacancyUrl) {
 }
 
 // ==================================================
+// BUILD GOV.UK URL
+// ==================================================
+
+function buildGovUkVacancyUrl(
+  vacancyReference
+) {
+  const reference =
+    normaliseVacancyReference(
+      vacancyReference
+    );
+
+  return (
+    "https://www.findapprenticeship.service.gov.uk/" +
+    `apprenticeship/VAC${reference}`
+  );
+}
+
+// ==================================================
+// RESOLVE VACANCY INPUT
+// ==================================================
+
+async function resolveVacancyInput(
+  vacancyInput
+) {
+  // ------------------------------------------------
+  // FULL VACANCY OBJECT
+  // ------------------------------------------------
+
+  if (
+    vacancyInput &&
+    typeof vacancyInput ===
+      "object" &&
+    !Array.isArray(
+      vacancyInput
+    )
+  ) {
+    const vacancy =
+      vacancyInput;
+
+    const vacancyReference =
+      normaliseVacancyReference(
+        vacancy.vacancyReference
+      );
+
+    if (
+      !vacancyReference
+    ) {
+      throw new Error(
+        "The supplied vacancy object does not contain a vacancyReference."
+      );
+    }
+
+    return {
+      vacancy,
+
+      vacancyReference,
+
+      vacancyUrl:
+        buildGovUkVacancyUrl(
+          vacancyReference
+        ),
+
+      source:
+        "vacancy_object",
+    };
+  }
+
+  // ------------------------------------------------
+  // URL
+  // ------------------------------------------------
+
+  const vacancyUrl =
+    String(
+      vacancyInput || ""
+    ).trim();
+
+  const vacancyReference =
+    getVacancyReferenceFromUrl(
+      vacancyUrl
+    );
+
+  console.log(
+    "\nGetting full vacancy information..."
+  );
+
+  const vacancy =
+    await findVacancy({
+      vacancyReference,
+    });
+
+  if (!vacancy) {
+    throw new Error(
+      `Could not find vacancy ${vacancyReference} in the apprenticeship API.`
+    );
+  }
+
+  return {
+    vacancy,
+    vacancyReference,
+    vacancyUrl,
+    source:
+      "vacancy_url",
+  };
+}
+
+// ==================================================
 // QUESTION TEXT
 // ==================================================
 
-async function getQuestionText(page) {
+async function getQuestionText(
+  page
+) {
   const heading =
-    page.locator("h1").first();
+    page
+      .locator("h1")
+      .first();
 
   await heading.waitFor({
     state: "visible",
@@ -180,7 +457,9 @@ async function getQuestionText(page) {
 // PAGE DIAGNOSTICS
 // ==================================================
 
-async function printPageDiagnostics(page) {
+async function printPageDiagnostics(
+  page
+) {
   console.log(
     "\n========================================"
   );
@@ -213,27 +492,37 @@ async function printPageDiagnostics(page) {
 
   try {
     const headings =
-      await page
-        .locator("h1, h2, h3")
-        .allTextContents();
+      (
+        await page
+          .locator(
+            "h1, h2, h3"
+          )
+          .allTextContents()
+      )
+        .map(
+          normaliseText
+        )
+        .filter(Boolean);
 
     console.log(
       "\nHEADINGS:"
     );
 
-    const useful =
-      headings
-        .map(normaliseText)
-        .filter(Boolean);
-
-    if (useful.length === 0) {
-      console.log("(none)");
-    }
-
-    for (const heading of useful) {
+    if (
+      headings.length === 0
+    ) {
       console.log(
-        `- ${heading}`
+        "(none)"
       );
+    } else {
+      for (
+        const heading
+        of headings
+      ) {
+        console.log(
+          `- ${heading}`
+        );
+      }
     }
   } catch {
     console.log(
@@ -242,32 +531,42 @@ async function printPageDiagnostics(page) {
   }
 
   // ------------------------------------------------
-  // FIELDSET LEGENDS
+  // LEGENDS
   // ------------------------------------------------
 
   try {
     const legends =
-      await page
-        .locator("legend")
-        .allTextContents();
+      (
+        await page
+          .locator(
+            "legend"
+          )
+          .allTextContents()
+      )
+        .map(
+          normaliseText
+        )
+        .filter(Boolean);
 
     console.log(
       "\nFIELDSET LEGENDS:"
     );
 
-    const useful =
-      legends
-        .map(normaliseText)
-        .filter(Boolean);
-
-    if (useful.length === 0) {
-      console.log("(none)");
-    }
-
-    for (const legend of useful) {
+    if (
+      legends.length === 0
+    ) {
       console.log(
-        `- ${legend}`
+        "(none)"
       );
+    } else {
+      for (
+        const legend
+        of legends
+      ) {
+        console.log(
+          `- ${legend}`
+        );
+      }
     }
   } catch {
     console.log(
@@ -287,39 +586,47 @@ async function printPageDiagnostics(page) {
         )
         .evaluateAll(
           (elements) =>
-            elements.map(
-              (element) =>
-                (
-                  element.innerText ||
-                  element.value ||
-                  element.getAttribute(
-                    "aria-label"
-                  ) ||
-                  ""
-                )
-                  .replace(
-                    /\s+/g,
-                    " "
+            elements
+              .map(
+                (element) =>
+                  (
+                    element.innerText ||
+                    element.value ||
+                    element.getAttribute(
+                      "aria-label"
+                    ) ||
+                    ""
                   )
-                  .trim()
-            )
+                    .replace(
+                      /\s+/g,
+                      " "
+                    )
+                    .trim()
+              )
+              .filter(
+                Boolean
+              )
         );
 
     console.log(
       "\nVISIBLE BUTTON / SUBMIT TEXT:"
     );
 
-    const useful =
-      buttons.filter(Boolean);
-
-    if (useful.length === 0) {
-      console.log("(none)");
-    }
-
-    for (const button of useful) {
+    if (
+      buttons.length === 0
+    ) {
       console.log(
-        `- ${button}`
+        "(none)"
       );
+    } else {
+      for (
+        const button
+        of buttons
+      ) {
+        console.log(
+          `- ${button}`
+        );
+      }
     }
   } catch {
     console.log(
@@ -334,7 +641,9 @@ async function printPageDiagnostics(page) {
   try {
     const links =
       await page
-        .locator("a[href]")
+        .locator(
+          "a[href]"
+        )
         .evaluateAll(
           (anchors) =>
             anchors
@@ -366,18 +675,25 @@ async function printPageDiagnostics(page) {
       "\nVISIBLE LINKS:"
     );
 
-    if (links.length === 0) {
-      console.log("(none)");
-    }
-
-    for (const link of links) {
+    if (
+      links.length === 0
+    ) {
       console.log(
-        `- ${link.text}`
+        "(none)"
       );
+    } else {
+      for (
+        const link
+        of links
+      ) {
+        console.log(
+          `- ${link.text}`
+        );
 
-      console.log(
-        `  ${link.href}`
-      );
+        console.log(
+          `  ${link.href}`
+        );
+      }
     }
   } catch {
     console.log(
@@ -394,18 +710,25 @@ async function printPageDiagnostics(page) {
 // QUESTION LINKS
 // ==================================================
 
-async function getQuestionLinks(page) {
+async function getQuestionLinks(
+  page
+) {
   return page
-    .locator("a[href]")
+    .locator(
+      "a[href]"
+    )
     .evaluateAll(
       (anchors) => {
-        const results = [];
+        const results =
+          [];
 
         for (
-          const anchor of anchors
+          const anchor
+          of anchors
         ) {
           const href =
-            anchor.href || "";
+            anchor.href ||
+            "";
 
           const lower =
             href.toLowerCase();
@@ -422,12 +745,7 @@ async function getQuestionLinks(page) {
             );
 
           if (
-            !isWrittenQuestion
-          ) {
-            continue;
-          }
-
-          if (
+            isWrittenQuestion &&
             !results.includes(
               href
             )
@@ -495,14 +813,17 @@ async function readQuestions({
 // SECTION COMPLETE
 // ==================================================
 
-async function markSectionComplete(page) {
+async function markSectionComplete(
+  page
+) {
   const selectors = [
     'input[name="IsSectionComplete"][value="true"]',
     'input[name="IsSectionCompleted"][value="true"]',
   ];
 
   for (
-    const selector of selectors
+    const selector
+    of selectors
   ) {
     const input =
       page.locator(
@@ -530,7 +851,9 @@ async function markSectionComplete(page) {
 // QUESTION CONTINUE
 // ==================================================
 
-async function clickContinue(page) {
+async function clickContinue(
+  page
+) {
   const button =
     page
       .getByRole(
@@ -581,10 +904,6 @@ async function fillQuestion({
     }
   );
 
-  // ------------------------------------------------
-  // VERIFY QUESTION
-  // ------------------------------------------------
-
   const liveQuestion =
     await getQuestionText(
       page
@@ -607,10 +926,6 @@ async function fillQuestion({
     );
   }
 
-  // ------------------------------------------------
-  // TEXTAREA
-  // ------------------------------------------------
-
   const textareas =
     page.locator(
       "textarea"
@@ -630,32 +945,21 @@ async function fillQuestion({
   const textarea =
     textareas.first();
 
-  // ------------------------------------------------
-  // FILL
-  // ------------------------------------------------
-
   await textarea.fill(
     answer
   );
-
-  // ------------------------------------------------
-  // VERIFY
-  // ------------------------------------------------
 
   const filledValue =
     await textarea.inputValue();
 
   if (
-    filledValue !== answer
+    filledValue !==
+    answer
   ) {
     throw new Error(
       `Textarea verification failed for question ${questionNumber}.`
     );
   }
-
-  // ------------------------------------------------
-  // COMPLETE
-  // ------------------------------------------------
 
   await markSectionComplete(
     page
@@ -709,10 +1013,6 @@ async function clickOverviewContinue({
     );
   }
 
-  // ------------------------------------------------
-  // CONTINUE LINK
-  // ------------------------------------------------
-
   const continueLinks =
     page.getByRole(
       "link",
@@ -735,10 +1035,6 @@ async function clickOverviewContinue({
 
   const continueLink =
     continueLinks.first();
-
-  // ------------------------------------------------
-  // HREF
-  // ------------------------------------------------
 
   const href =
     await continueLink.getAttribute(
@@ -785,10 +1081,6 @@ async function clickOverviewContinue({
   console.log(
     "Destination verified as this application's /preview page."
   );
-
-  // ------------------------------------------------
-  // OPEN PREVIEW
-  // ------------------------------------------------
 
   await continueLink.click();
 
@@ -870,7 +1162,14 @@ async function saveAuthStateIfSignedIn(
 // KEEP OPEN
 // ==================================================
 
-async function keepBrowserOpen(page) {
+async function keepBrowserOpen(
+  page,
+  enabled = true
+) {
+  if (!enabled) {
+    return;
+  }
+
   console.log(
     "\nBrowser will remain open for 5 minutes for inspection."
   );
@@ -940,18 +1239,21 @@ function writeApplicationLog(
 function getSubmissionRecord(
   vacancyReference
 ) {
+  const wantedReference =
+    normaliseVacancyReference(
+      vacancyReference
+    );
+
   const records =
     readApplicationLog();
 
   return records
     .filter(
       (record) =>
-        String(
+        normaliseVacancyReference(
           record.vacancyReference
         ) ===
-          String(
-            vacancyReference
-          ) &&
+          wantedReference &&
         [
           "submission_attempted",
           "submitted",
@@ -974,15 +1276,17 @@ function recordApplicationEvent({
 
   records.push({
     vacancyReference:
-      String(
+      normaliseVacancyReference(
         vacancyReference
       ),
 
     vacancyTitle:
-      vacancyTitle || "",
+      vacancyTitle ||
+      "",
 
     employerName:
-      employerName || "",
+      employerName ||
+      "",
 
     status,
 
@@ -998,16 +1302,12 @@ function recordApplicationEvent({
 }
 
 // ==================================================
-// FINAL PAGE
+// FINAL SUBMISSION CONTROLS
 // ==================================================
 
 async function getFinalSubmissionControls(
   page
 ) {
-  // ------------------------------------------------
-  // REVIEW PAGE H1
-  // ------------------------------------------------
-
   const pageHeading =
     page
       .locator("h1")
@@ -1037,10 +1337,6 @@ async function getFinalSubmissionControls(
   console.log(
     'Review page heading verified: "Check your application before submitting"'
   );
-
-  // ------------------------------------------------
-  // SUBMISSION SECTION
-  // ------------------------------------------------
 
   const submissionSectionTexts =
     page.getByText(
@@ -1077,10 +1373,6 @@ async function getFinalSubmissionControls(
     'Final section text verified: "Submit your application"'
   );
 
-  // ------------------------------------------------
-  // ACKNOWLEDGEMENT
-  // ------------------------------------------------
-
   const acknowledgement =
     page.getByRole(
       "checkbox",
@@ -1116,10 +1408,6 @@ async function getFinalSubmissionControls(
   console.log(
     "Final acknowledgement checkbox verified."
   );
-
-  // ------------------------------------------------
-  // SUBMIT BUTTON
-  // ------------------------------------------------
 
   const submitButtons =
     page.getByRole(
@@ -1167,7 +1455,7 @@ async function getFinalSubmissionControls(
 }
 
 // ==================================================
-// CONFIRM SUBMISSION
+// VERIFY CONFIRMATION
 // ==================================================
 
 async function verifySubmissionConfirmation(
@@ -1216,7 +1504,7 @@ async function verifySubmissionConfirmation(
 }
 
 // ==================================================
-// SUBMIT
+// SUBMIT APPLICATION
 // ==================================================
 
 async function submitApplication({
@@ -1224,10 +1512,6 @@ async function submitApplication({
   vacancyReference,
   vacancy,
 }) {
-  // ------------------------------------------------
-  // DUPLICATE PROTECTION
-  // ------------------------------------------------
-
   const existingRecord =
     getSubmissionRecord(
       vacancyReference
@@ -1245,10 +1529,6 @@ async function submitApplication({
       ].join("\n")
     );
   }
-
-  // ------------------------------------------------
-  // VERIFY AGAIN
-  // ------------------------------------------------
 
   const {
     acknowledgement,
@@ -1270,10 +1550,6 @@ async function submitApplication({
     "Submit button verified."
   );
 
-  // ------------------------------------------------
-  // ACKNOWLEDGE
-  // ------------------------------------------------
-
   if (
     !(await acknowledgement.isChecked())
   ) {
@@ -1292,10 +1568,6 @@ async function submitApplication({
     "Final acknowledgement checked."
   );
 
-  // ------------------------------------------------
-  // LOG BEFORE CLICK
-  // ------------------------------------------------
-
   recordApplicationEvent({
     vacancyReference,
 
@@ -1312,10 +1584,6 @@ async function submitApplication({
       "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
   });
 
-  // ------------------------------------------------
-  // CLICK ONCE
-  // ------------------------------------------------
-
   console.log(
     "\nClicking final Submit ONCE..."
   );
@@ -1329,10 +1597,6 @@ async function submitApplication({
     .catch(
       () => {}
     );
-
-  // ------------------------------------------------
-  // CONFIRM
-  // ------------------------------------------------
 
   const confirmation =
     await verifySubmissionConfirmation(
@@ -1352,10 +1616,6 @@ async function submitApplication({
       ].join("\n")
     );
   }
-
-  // ------------------------------------------------
-  // LOG SUCCESS
-  // ------------------------------------------------
 
   recordApplicationEvent({
     vacancyReference,
@@ -1381,32 +1641,39 @@ async function submitApplication({
 // ==================================================
 
 async function fillApplication(
-  vacancyUrl,
+  vacancyInput,
   {
     submit = false,
+    interactive = true,
+    keepOpen = true,
   } = {}
 ) {
-  const vacancyReference =
-    getVacancyReferenceFromUrl(
-      vacancyUrl
+  // ------------------------------------------------
+  // RESOLVE VACANCY
+  // ------------------------------------------------
+
+  const resolved =
+    await resolveVacancyInput(
+      vacancyInput
     );
+
+  const {
+    vacancy,
+    vacancyReference,
+    vacancyUrl,
+    source,
+  } = resolved;
 
   console.log(
     `Vacancy reference: ${vacancyReference}`
   );
 
-  console.log(
-    "\nGetting full vacancy information..."
-  );
-
-  const vacancy =
-    await findVacancy({
-      vacancyReference,
-    });
-
-  if (!vacancy) {
-    throw new Error(
-      `Could not find vacancy ${vacancyReference} in the apprenticeship API.`
+  if (
+    source ===
+    "vacancy_object"
+  ) {
+    console.log(
+      "Using vacancy data already supplied by the bulk runner."
     );
   }
 
@@ -1417,6 +1684,34 @@ async function fillApplication(
   console.log(
     `Employer: ${vacancy.employerName}`
   );
+
+  // ------------------------------------------------
+  // EARLY DUPLICATE PROTECTION
+  // ------------------------------------------------
+
+  if (submit) {
+    const existingRecord =
+      getSubmissionRecord(
+        vacancyReference
+      );
+
+    if (
+      existingRecord
+    ) {
+      console.log(
+        `\nSkipping ${vacancyReference}: local log already contains "${existingRecord.status}".`
+      );
+
+      return {
+        status:
+          "already_submitted",
+
+        vacancyReference,
+
+        existingRecord,
+      };
+    }
+  }
 
   // ------------------------------------------------
   // AUTH
@@ -1489,8 +1784,38 @@ async function fillApplication(
     if (
       !applicationControl
     ) {
+      const externalApplication =
+        await getExternalApplication(
+          page
+        );
+
+      if (
+        externalApplication
+      ) {
+        console.log(
+          "\nExternal application detected."
+        );
+
+        console.log(
+          `External destination: ${externalApplication.url}`
+        );
+
+        console.log(
+          "Skipping this vacancy without opening the external site."
+        );
+
+        return {
+          status:
+            "external_application",
+
+          vacancyReference,
+
+          externalApplication,
+        };
+      }
+
       throw new Error(
-        "Could not find Apply now / Apply for apprenticeship / Continue application."
+        "Could not find a supported native GOV.UK application control."
       );
     }
 
@@ -1505,18 +1830,44 @@ async function fillApplication(
     );
 
     // ================================================
-    // OVERVIEW
+    // VERIFY NATIVE APPLICATION
     // ================================================
 
-    const overviewUrl =
+    const currentUrl =
       page.url();
+
+    const currentParsed =
+      new URL(
+        currentUrl
+      );
+
+    if (
+      currentParsed.hostname !==
+        "www.findapprenticeship.service.gov.uk" ||
+      !currentParsed.pathname.startsWith(
+        "/applications/"
+      )
+    ) {
+      throw new Error(
+        [
+          "The application control did not open a supported native GOV.UK application.",
+          `Destination: ${currentUrl}`,
+        ].join("\n")
+      );
+    }
+
+    const overviewUrl =
+      currentUrl.replace(
+        /\/$/,
+        ""
+      );
 
     console.log(
       "\nApplication overview opened."
     );
 
     // ================================================
-    // QUESTIONS
+    // DISCOVER QUESTIONS
     // ================================================
 
     const questionLinks =
@@ -1538,7 +1889,7 @@ async function fillApplication(
     );
 
     // ================================================
-    // READ
+    // READ QUESTIONS
     // ================================================
 
     const questions =
@@ -1598,8 +1949,8 @@ async function fillApplication(
       );
 
       for (
-        const result of
-        generatorManualReviews
+        const result
+        of generatorManualReviews
       ) {
         console.log(
           `\nQuestion ${result.questionNumber}: ${result.reviewReason}`
@@ -1629,7 +1980,8 @@ async function fillApplication(
       );
 
       await keepBrowserOpen(
-        page
+        page,
+        keepOpen
       );
 
       return {
@@ -1640,11 +1992,22 @@ async function fillApplication(
           "generator",
 
         vacancyReference,
+
+        reasons:
+          generatorManualReviews.map(
+            (result) => ({
+              questionNumber:
+                result.questionNumber,
+
+              reason:
+                result.reviewReason,
+            })
+          ),
       };
     }
 
     // ================================================
-    // REVIEW
+    // INDEPENDENT REVIEW
     // ================================================
 
     console.log(
@@ -1701,7 +2064,8 @@ async function fillApplication(
       );
 
       await keepBrowserOpen(
-        page
+        page,
+        keepOpen
       );
 
       return {
@@ -1783,7 +2147,7 @@ async function fillApplication(
     }
 
     // ================================================
-    // RETURN OVERVIEW
+    // RETURN TO OVERVIEW
     // ================================================
 
     await returnToOverview({
@@ -1889,7 +2253,8 @@ async function fillApplication(
       );
 
       await keepBrowserOpen(
-        page
+        page,
+        keepOpen
       );
 
       return {
@@ -1972,7 +2337,8 @@ async function fillApplication(
     );
 
     await keepBrowserOpen(
-      page
+      page,
+      keepOpen
     );
 
     return {
@@ -2024,17 +2390,33 @@ async function fillApplication(
       () => {}
     );
 
-    console.log(
-      "\nThe browser will NOT close automatically."
-    );
+    // ----------------------------------------------
+    // INTERACTIVE SINGLE-VACANCY MODE
+    // ----------------------------------------------
 
-    console.log(
-      "Inspect the page before continuing."
-    );
+    if (interactive) {
+      console.log(
+        "\nThe browser will NOT close automatically."
+      );
 
-    await waitForEnter(
-      "\nPress ENTER in this terminal when you are finished inspecting the browser..."
-    );
+      console.log(
+        "Inspect the page before continuing."
+      );
+
+      await waitForEnter(
+        "\nPress ENTER in this terminal when you are finished inspecting the browser..."
+      );
+    }
+
+    // ----------------------------------------------
+    // UNATTENDED BULK MODE
+    // ----------------------------------------------
+
+    else {
+      console.log(
+        "\nUnattended mode: closing this vacancy and continuing with the bulk run."
+      );
+    }
 
     throw error;
   } finally {
@@ -2072,14 +2454,8 @@ if (
         )
     );
 
-  const defaultVacancyUrl = [
-    "https:",
-    "",
-    "www.findapprenticeship.service.gov.uk",
-    "apprenticeship",
-    "reference",
-    "2000054368",
-  ].join("/");
+  const defaultVacancyUrl =
+    "https://www.findapprenticeship.service.gov.uk/apprenticeship/reference/2000054368";
 
   const vacancyUrl =
     suppliedUrl ||
@@ -2122,4 +2498,6 @@ module.exports = {
   fillApplication,
   getVacancyReferenceFromUrl,
   normaliseVacancyReference,
+  buildGovUkVacancyUrl,
+  getSubmissionRecord,
 };

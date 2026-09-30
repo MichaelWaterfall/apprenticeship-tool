@@ -14,5 +14,21 @@
     "status": "submitted",
     "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/42c84c08-49f8-4f02-88f9-66f9c536ada9/application-submitted",
     "timestamp": "2026-09-30T13:03:24.583Z"
+  },
+  {
+    "vacancyReference": "2000053529",
+    "vacancyTitle": "Apprentice CNC Machinist",
+    "employerName": "IMS PRECISION ENGINEERING LTD.",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T14:14:43.371Z"
+  },
+  {
+    "vacancyReference": "2000053529",
+    "vacancyTitle": "Apprentice CNC Machinist",
+    "employerName": "IMS PRECISION ENGINEERING LTD.",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/60d65aca-a676-4917-b0e4-a89c108fc1df/application-submitted",
+    "timestamp": "2026-09-30T14:14:44.157Z"
   }
 ]
