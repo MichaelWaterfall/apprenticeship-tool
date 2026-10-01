@@ -32,9 +32,8 @@ const careerKeywords = [
   "electronic",
   "electronics",
 
-  // Mechanical
-  "mechanical",
-  "mechanic",
+  // Software
+  "software",
 
   // Manufacturing
   "manufacturing",

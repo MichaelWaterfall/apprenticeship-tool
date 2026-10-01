@@ -1,0 +1,66 @@
+[
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "started",
+    "details": "Dry-run bulk application started.",
+    "timestamp": "2026-09-30T21:26:55.939Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-09-30T21:27:19.196Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "started",
+    "details": "Dry-run bulk application started.",
+    "timestamp": "2026-09-30T21:32:29.171Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-09-30T21:33:06.536Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "started",
+    "details": "Dry-run bulk application started.",
+    "timestamp": "2026-09-30T21:33:06.649Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-09-30T21:33:41.809Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "started",
+    "details": "Dry-run bulk application started.",
+    "timestamp": "2026-09-30T21:33:41.828Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-09-30T21:34:07.724Z"
+  }
+]

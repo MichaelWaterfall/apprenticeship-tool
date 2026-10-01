@@ -30,5 +30,85 @@
     "status": "submitted",
     "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/60d65aca-a676-4917-b0e4-a89c108fc1df/application-submitted",
     "timestamp": "2026-09-30T14:14:44.157Z"
+  },
+  {
+    "vacancyReference": "2000053902",
+    "vacancyTitle": "Apprentice Engineering Technician in Mechatronic Maintenance",
+    "employerName": "BWSC GENERATION SERVICES UK LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T20:54:46.128Z"
+  },
+  {
+    "vacancyReference": "2000053902",
+    "vacancyTitle": "Apprentice Engineering Technician in Mechatronic Maintenance",
+    "employerName": "BWSC GENERATION SERVICES UK LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/d56f60ad-a3fa-4fe1-bba7-2bf6715a5aea/application-submitted",
+    "timestamp": "2026-09-30T20:54:46.873Z"
+  },
+  {
+    "vacancyReference": "2000054736",
+    "vacancyTitle": "Apprentice Engineering Technician in Mechatronic Maintenance",
+    "employerName": "BWSC GENERATION SERVICES UK LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T20:55:59.757Z"
+  },
+  {
+    "vacancyReference": "2000054736",
+    "vacancyTitle": "Apprentice Engineering Technician in Mechatronic Maintenance",
+    "employerName": "BWSC GENERATION SERVICES UK LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/b9836e37-b429-4ba1-aeef-15b8139d720d/application-submitted",
+    "timestamp": "2026-09-30T20:56:00.581Z"
+  },
+  {
+    "vacancyReference": "2000042535",
+    "vacancyTitle": "CAD Operative Engineer Apprentice",
+    "employerName": "ACETARC LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T20:57:11.778Z"
+  },
+  {
+    "vacancyReference": "2000042535",
+    "vacancyTitle": "CAD Operative Engineer Apprentice",
+    "employerName": "ACETARC LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/48cb026b-036d-44ba-b9b8-967da89ff270/application-submitted",
+    "timestamp": "2026-09-30T20:57:12.494Z"
+  },
+  {
+    "vacancyReference": "2000048649",
+    "vacancyTitle": "Apprentice CNC Machine Shop Technician",
+    "employerName": "PORVAIR FILTRATION GROUP LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T21:06:13.863Z"
+  },
+  {
+    "vacancyReference": "2000048649",
+    "vacancyTitle": "Apprentice CNC Machine Shop Technician",
+    "employerName": "PORVAIR FILTRATION GROUP LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/8ea07122-b0f2-45c2-a5c5-85e750651bcf/application-submitted",
+    "timestamp": "2026-09-30T21:06:14.698Z"
+  },
+  {
+    "vacancyReference": "2000049973",
+    "vacancyTitle": "Machinist Apprentice",
+    "employerName": "HOLMBRIDGE ENG CO LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-09-30T21:23:52.872Z"
+  },
+  {
+    "vacancyReference": "2000049973",
+    "vacancyTitle": "Machinist Apprentice",
+    "employerName": "HOLMBRIDGE ENG CO LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/ccb42d57-9fb7-4411-a92e-5b0ee809eb44/application-submitted",
+    "timestamp": "2026-09-30T21:23:53.677Z"
   }
 ]
