@@ -278,18 +278,38 @@ function validateReview(parsed) {
     );
   }
 
-  if (!Array.isArray(parsed.blocking_requirements)) {
+  if (
+    !String(
+      parsed.reason || ""
+    ).trim()
+  ) {
+    throw new Error(
+      "Vacancy reviewer returned no reason for its decision."
+    );
+  }
+
+  if (
+    !Array.isArray(
+      parsed.blocking_requirements
+    )
+  ) {
     throw new Error(
       "Vacancy reviewer did not return blocking_requirements as an array."
     );
   }
 
-  if (!Array.isArray(parsed.unresolved_requirements)) {
+  if (
+    !Array.isArray(
+      parsed.unresolved_requirements
+    )
+  ) {
     throw new Error(
       "Vacancy reviewer did not return unresolved_requirements as an array."
     );
   }
 
+  // A suitable vacancy must have no known blockers
+  // and no unresolved essential requirements.
   if (
     parsed.status === "suitable" &&
     (
@@ -302,15 +322,21 @@ function validateReview(parsed) {
     );
   }
 
-  if (
-    parsed.status === "unsuitable" &&
-    parsed.blocking_requirements.length === 0
-  ) {
-    throw new Error(
-      "Vacancy reviewer marked the vacancy unsuitable without identifying a blocking requirement."
-    );
-  }
+  // An unsuitable vacancy does NOT always need a
+  // blocking requirement.
+  //
+  // Example:
+  // A Business Administration apprenticeship may be
+  // unsuitable simply because its actual career area
+  // does not match any target career. In that case
+  // blocking_requirements should correctly be empty.
+  //
+  // If there IS an explicit blocker, such as an
+  // essential driving licence or qualification, the
+  // reviewer should place it in blocking_requirements.
 
+  // Manual review must identify what could not be
+  // safely established.
   if (
     parsed.status === "manual_review" &&
     parsed.unresolved_requirements.length === 0
