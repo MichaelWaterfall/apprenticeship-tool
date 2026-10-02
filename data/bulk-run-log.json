@@ -62,5 +62,173 @@
     "status": "ready_to_submit",
     "details": "",
     "timestamp": "2026-09-30T21:34:07.724Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The vacancy is genuinely centred on engineering maintenance, including planned maintenance, servicing, reactive breakdown repairs and equipment fault resolution. The Level 2 Engineering Operative training is relevant.\",\"reason\":\"No essential entry requirements are stated. The listed English and maths GCSE grades are desired, not essential, and the applicant has English Language grade 5 and maths grade 5. The applicant's fault-finding and practical repair experience with arcade machines is relevant, and no driving requirement is given.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-01T20:31:26.240Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-01T20:31:26.252Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "error",
+    "details": "Could not find a supported native GOV.UK application control.",
+    "timestamp": "2026-10-01T20:31:42.538Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"Engineering maintenance\",\"reason\":\"The role is genuinely centred on planned and reactive maintenance, equipment servicing, repairs, breakdown fault-finding and engineering training. The applicant's interests and practical fault-finding experience are relevant. The listed English and maths GCSE requirements are desired rather than essential, and the applicant has GCSE English Language grade 5 and Mathematics grade 5. No driving licence or other unmet mandatory requirement is stated.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:03:36.611Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:03:36.627Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:04:06.263Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The vacancy is genuinely centred on engineering maintenance, including planned maintenance, servicing, reactive breakdown repairs and equipment fault-finding. The Level 2 Engineering Operative training also directly fits the applicant's engineering and maintenance career interests.\",\"reason\":\"The applicant's GCSE English and maths grades meet the vacancy's stated A-C / grade 4 criteria, which are listed as desired rather than essential. The applicant has relevant fault-finding and practical repair experience with arcade machinery, and no licence, vehicle, prior specialist qualification or mandatory experience is required. Relocation is acceptable.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:05:21.341Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:05:21.344Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:05:47.591Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The apprenticeship is genuinely centred on welding, fabrication and manufacturing engineering. Duties include measuring and marking steel, fabricating from drawings, using tools and machinery, and learning MIG and TIG welding methods.\",\"reason\":\"The role directly matches the applicant's stated interests in welding, fabrication and manufacturing. The listed English and maths GCSE grades are desired rather than essential, and the applicant has English Language grade 5 and Maths grade 5. No driving licence, prior welding experience or other essential prerequisite is stated.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:05:51.244Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:05:51.246Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:06:17.118Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The apprenticeship is genuinely centred on CNC machining and manufacturing engineering, including setting up, programming and operating CNC machinery and machining components to specifications.\",\"reason\":\"The applicant's stated career interests include manufacturing, machining and CNC. The vacancy provides training through a Level 2 Lean Manufacturing Operative apprenticeship, and the listed English and Maths GCSE grades are desired rather than essential. No driving licence or prior specialist CNC experience is required.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:06:21.007Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:06:21.011Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:06:47.973Z"
+  },
+  {
+    "vacancyReference": "1000270253",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The role is genuinely centred on welding, fabrication and manufacturing engineering, including measuring and marking steel, fabricating from drawings, using machinery and MIG/TIG welding. This matches the applicant's stated interests in manufacturing, welding, fabrication and mechanical engineering.\",\"reason\":\"The vacancy is an entry-level Level 2 apprenticeship designed to teach the required manufacturing and fabrication skills. The listed English and maths GCSE grades are desired rather than essential, and the applicant has English Language grade 5 and Maths grade 5. No driving licence, vehicle access or prior specialist welding experience is required.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:06:50.632Z"
+  },
+  {
+    "vacancyReference": "1000270253",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:06:50.635Z"
+  },
+  {
+    "vacancyReference": "1000270253",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:07:17.233Z"
+  },
+  {
+    "vacancyReference": "1000277643",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "suitability_suitable",
+    "details": "{\"status\":\"suitable\",\"careerMatch\":\"The apprenticeship is genuinely centred on manufacturing engineering activities, including using tools and machinery, measuring and marking materials, processing jobs from drawings, and learning Lean Manufacturing techniques.\",\"reason\":\"No essential entry requirements are stated. The English and maths GCSE grades are desired rather than essential, and the applicant has English Language grade 5 and Maths grade 5. The role is designed to develop practical manufacturing skills and does not require a driving licence or prior specialist experience.\",\"blockingRequirements\":[],\"unresolvedRequirements\":[]}",
+    "timestamp": "2026-10-02T06:07:20.530Z"
+  },
+  {
+    "vacancyReference": "1000277643",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "application_started",
+    "details": "Suitability gate passed. Dry-run application started.",
+    "timestamp": "2026-10-02T06:07:20.537Z"
+  },
+  {
+    "vacancyReference": "1000277643",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "ready_to_submit",
+    "details": "",
+    "timestamp": "2026-10-02T06:07:46.163Z"
   }
 ]

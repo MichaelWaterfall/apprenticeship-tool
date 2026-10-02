@@ -15,6 +15,11 @@ const {
   getSubmissionRecord,
 } = require("./applicants/govuk");
 
+const {
+  reviewVacancySuitability,
+  printVacancyReview,
+} = require("./vacancyReviewer");
+
 const BULK_LOG_FILE = path.join(
   __dirname,
   "..",
@@ -23,10 +28,6 @@ const BULK_LOG_FILE = path.join(
 );
 
 const DEFAULT_LIMIT = 1;
-
-// ==================================================
-// BULK LOG
-// ==================================================
 
 function readBulkLog() {
   if (!fs.existsSync(BULK_LOG_FILE)) {
@@ -75,8 +76,7 @@ function recordBulkEvent({
   status,
   details = "",
 }) {
-  const records =
-    readBulkLog();
+  const records = readBulkLog();
 
   records.push({
     vacancyReference:
@@ -101,23 +101,14 @@ function recordBulkEvent({
   writeBulkLog(records);
 }
 
-// ==================================================
-// ARGUMENT HELPERS
-// ==================================================
-
-function getArgValue(
-  args,
-  name
-) {
-  const index =
-    args.indexOf(name);
+function getArgValue(args, name) {
+  const index = args.indexOf(name);
 
   if (index === -1) {
     return null;
   }
 
-  const value =
-    args[index + 1];
+  const value = args[index + 1];
 
   if (
     !value ||
@@ -135,8 +126,7 @@ function parsePositiveInteger(
   value,
   name
 ) {
-  const parsed =
-    Number(value);
+  const parsed = Number(value);
 
   if (
     !Number.isInteger(parsed) ||
@@ -175,10 +165,7 @@ function parseOptions(args) {
       "--reference"
     );
 
-  if (
-    all &&
-    limitValue
-  ) {
+  if (all && limitValue) {
     throw new Error(
       "Use either --all or --limit, not both."
     );
@@ -186,7 +173,6 @@ function parseOptions(args) {
 
   return {
     submit,
-
     all,
 
     limit:
@@ -216,10 +202,6 @@ function parseOptions(args) {
   };
 }
 
-// ==================================================
-// MODE
-// ==================================================
-
 function printMode(options) {
   console.log(
     "========================================"
@@ -242,7 +224,7 @@ function printMode(options) {
   );
 
   console.log(
-    `Vacancy limit: ${
+    `Vacancy review limit: ${
       options.limit === Infinity
         ? "ALL"
         : options.limit
@@ -253,51 +235,37 @@ function printMode(options) {
     `Start position: ${options.start}`
   );
 
-  if (
-    options.reference
-  ) {
+  if (options.reference) {
     console.log(
       `Reference filter: ${options.reference}`
     );
   }
 
-  if (
-    !options.submit
-  ) {
+  if (!options.submit) {
     console.log(
-      "\nDRY RUN: applications may be filled and saved, but final Submit will not be clicked."
+      "\nDRY RUN: suitable applications may be filled and saved, but final Submit will not be clicked."
     );
   } else {
     console.log(
-      "\nLIVE MODE: approved native GOV.UK applications can be submitted for real."
+      "\nLIVE MODE: vacancies must pass the suitability gate and all application gates before a native GOV.UK application can be submitted."
     );
   }
 }
-
-// ==================================================
-// FILTER VACANCIES
-// ==================================================
 
 function selectSuitableVacancies(
   allVacancies,
   options
 ) {
-  let suitable =
+  let candidates =
     allVacancies.filter(
       (vacancy) =>
-        matchesCareer(
-          vacancy
-        ) &&
-        !isExcluded(
-          vacancy
-        )
+        matchesCareer(vacancy) &&
+        !isExcluded(vacancy)
     );
 
-  if (
-    options.reference
-  ) {
-    suitable =
-      suitable.filter(
+  if (options.reference) {
+    candidates =
+      candidates.filter(
         (vacancy) =>
           normaliseVacancyReference(
             vacancy.vacancyReference
@@ -306,18 +274,13 @@ function selectSuitableVacancies(
       );
   }
 
-  return suitable;
+  return candidates;
 }
 
-// ==================================================
-// AUTH FAILURE
-// ==================================================
-
 function isAuthFailure(error) {
-  const message =
-    String(
-      error?.message || ""
-    ).toLowerCase();
+  const message = String(
+    error?.message || ""
+  ).toLowerCase();
 
   return (
     message.includes(
@@ -329,24 +292,34 @@ function isAuthFailure(error) {
   );
 }
 
-// ==================================================
-// RESULT
-// ==================================================
-
 function summariseResult(result) {
-  if (
-    !result ||
-    !result.status
-  ) {
+  if (!result || !result.status) {
     return "unknown";
   }
 
   return result.status;
 }
 
-// ==================================================
-// BULK RUN
-// ==================================================
+function formatSuitabilityDetails(
+  review
+) {
+  return JSON.stringify({
+    status:
+      review.status,
+
+    careerMatch:
+      review.careerMatch,
+
+    reason:
+      review.reason,
+
+    blockingRequirements:
+      review.blockingRequirements,
+
+    unresolvedRequirements:
+      review.unresolvedRequirements,
+  });
+}
 
 async function runBulkApplications(
   options
@@ -361,22 +334,21 @@ async function runBulkApplications(
     await getAllVacancies();
 
   // ------------------------------------------------
-  // FILTER IN MEMORY
+  // CHEAP KEYWORD FILTER
   // ------------------------------------------------
 
-  const suitableVacancies =
+  const candidateVacancies =
     selectSuitableVacancies(
       allVacancies,
       options
     );
 
   console.log(
-    `\nPotentially suitable vacancies after career/exclusion filtering: ${suitableVacancies.length}`
+    `\nKeyword-filtered candidate vacancies: ${candidateVacancies.length}`
   );
 
   if (
-    suitableVacancies.length ===
-    0
+    candidateVacancies.length === 0
   ) {
     console.log(
       "Nothing to process."
@@ -393,7 +365,7 @@ async function runBulkApplications(
     options.start - 1;
 
   const candidates =
-    suitableVacancies.slice(
+    candidateVacancies.slice(
       startIndex
     );
 
@@ -403,16 +375,20 @@ async function runBulkApplications(
 
   const summary = {
     considered: 0,
+    suitabilityReviewed: 0,
+    suitable: 0,
+    unsuitable: 0,
+    suitabilityManualReview: 0,
     processed: 0,
     submitted: 0,
     readyToSubmit: 0,
-    manualReview: 0,
+    applicationManualReview: 0,
     externalApplication: 0,
     alreadySubmitted: 0,
     errors: 0,
   };
 
-  let attempted = 0;
+  let reviewedCount = 0;
 
   // ------------------------------------------------
   // PROCESS VACANCIES
@@ -424,7 +400,7 @@ async function runBulkApplications(
     i++
   ) {
     if (
-      attempted >=
+      reviewedCount >=
       options.limit
     ) {
       break;
@@ -439,9 +415,7 @@ async function runBulkApplications(
       );
 
     const position =
-      startIndex +
-      i +
-      1;
+      startIndex + i + 1;
 
     summary.considered++;
 
@@ -450,7 +424,7 @@ async function runBulkApplications(
     );
 
     console.log(
-      `VACANCY ${position} OF ${suitableVacancies.length}`
+      `VACANCY ${position} OF ${candidateVacancies.length}`
     );
 
     console.log(
@@ -489,16 +463,13 @@ async function runBulkApplications(
 
       recordBulkEvent({
         vacancy,
-
         status:
           "invalid_vacancy",
-
         details:
           "Vacancy had no usable vacancy reference.",
       });
 
       summary.errors++;
-
       continue;
     }
 
@@ -511,46 +482,135 @@ async function runBulkApplications(
         reference
       );
 
-    if (
-      existingSubmission
-    ) {
+    if (existingSubmission) {
       console.log(
         `SKIP: local application log already contains "${existingSubmission.status}".`
       );
 
       recordBulkEvent({
         vacancy,
-
         status:
           "already_submitted",
-
         details:
           `Existing application-log status: ${existingSubmission.status}`,
       });
 
       summary.alreadySubmitted++;
-
       continue;
     }
 
     // ================================================
-    // COUNT THIS AS AN ATTEMPT
+    // SUITABILITY REVIEW COUNTS TOWARD LIMIT
     // ================================================
 
-    attempted++;
+    reviewedCount++;
+    summary.suitabilityReviewed++;
 
+    // ================================================
+    // SUITABILITY GATE
+    // ================================================
+
+    let suitabilityReview;
+
+    try {
+      suitabilityReview =
+        await reviewVacancySuitability(
+          vacancy
+        );
+
+      printVacancyReview(
+        suitabilityReview
+      );
+
+      recordBulkEvent({
+        vacancy,
+        status:
+          `suitability_${suitabilityReview.status}`,
+        details:
+          formatSuitabilityDetails(
+            suitabilityReview
+          ),
+      });
+    } catch (error) {
+      const message = String(
+        error?.message || error
+      );
+
+      summary.errors++;
+
+      recordBulkEvent({
+        vacancy,
+        status:
+          "suitability_error",
+        details:
+          message,
+      });
+
+      console.error(
+        "\nRESULT: SUITABILITY REVIEW ERROR"
+      );
+
+      console.error(
+        message
+      );
+
+      console.log(
+        "Skipping this vacancy without opening an application."
+      );
+
+      continue;
+    }
+
+    if (
+      suitabilityReview.status ===
+      "unsuitable"
+    ) {
+      summary.unsuitable++;
+
+      console.log(
+        "\nRESULT: UNSUITABLE - skipped before opening application"
+      );
+
+      continue;
+    }
+
+    if (
+      suitabilityReview.status ===
+      "manual_review"
+    ) {
+      summary.suitabilityManualReview++;
+
+      console.log(
+        "\nRESULT: SUITABILITY MANUAL REVIEW - skipped before opening application"
+      );
+
+      continue;
+    }
+
+    if (
+      suitabilityReview.status !==
+      "suitable"
+    ) {
+      summary.errors++;
+
+      console.log(
+        `\nRESULT: UNKNOWN SUITABILITY STATUS "${suitabilityReview.status}" - skipped`
+      );
+
+      continue;
+    }
+
+    summary.suitable++;
     summary.processed++;
 
     recordBulkEvent({
       vacancy,
-
       status:
-        "started",
-
+        "application_started",
       details:
         options.submit
-          ? "Live bulk application started."
-          : "Dry-run bulk application started.",
+          ? "Suitability gate passed. Live application started."
+          : "Suitability gate passed. Dry-run application started.",
     });
 
     // ================================================
@@ -580,18 +640,12 @@ async function runBulkApplications(
 
       recordBulkEvent({
         vacancy,
-
         status,
-
         details:
           result?.stage
             ? `Stage: ${result.stage}`
             : "",
       });
-
-      // ==============================================
-      // RESULT HANDLING
-      // ==============================================
 
       switch (status) {
         case "submitted":
@@ -600,7 +654,6 @@ async function runBulkApplications(
           console.log(
             "\nRESULT: SUBMITTED"
           );
-
           break;
 
         case "ready_to_submit":
@@ -609,16 +662,14 @@ async function runBulkApplications(
           console.log(
             "\nRESULT: READY TO SUBMIT (dry run; not submitted)"
           );
-
           break;
 
         case "manual_review":
-          summary.manualReview++;
+          summary.applicationManualReview++;
 
           console.log(
-            "\nRESULT: MANUAL REVIEW - continuing to next vacancy"
+            "\nRESULT: APPLICATION MANUAL REVIEW - continuing to next vacancy"
           );
-
           break;
 
         case "external_application":
@@ -627,7 +678,6 @@ async function runBulkApplications(
           console.log(
             "\nRESULT: EXTERNAL APPLICATION - skipped"
           );
-
           break;
 
         case "already_submitted":
@@ -636,7 +686,6 @@ async function runBulkApplications(
           console.log(
             "\nRESULT: ALREADY SUBMITTED - skipped"
           );
-
           break;
 
         default:
@@ -645,24 +694,19 @@ async function runBulkApplications(
           console.log(
             `\nRESULT: UNEXPECTED STATUS "${status}"`
           );
-
           break;
       }
     } catch (error) {
-      const message =
-        String(
-          error?.message ||
-          error
-        );
+      const message = String(
+        error?.message || error
+      );
 
       summary.errors++;
 
       recordBulkEvent({
         vacancy,
-
         status:
           "error",
-
         details:
           message,
       });
@@ -675,25 +719,12 @@ async function runBulkApplications(
         message
       );
 
-      // ==============================================
-      // AUTH FAILURE
-      // ==============================================
-
-      if (
-        isAuthFailure(
-          error
-        )
-      ) {
+      if (isAuthFailure(error)) {
         console.error(
           "\nAuthentication is unavailable. Stopping the whole bulk run rather than failing every vacancy."
         );
-
         break;
       }
-
-      // ==============================================
-      // UNKNOWN SUBMISSION STATE
-      // ==============================================
 
       if (
         message.includes(
@@ -732,7 +763,23 @@ async function runBulkApplications(
   );
 
   console.log(
-    `Processed: ${summary.processed}`
+    `Suitability reviewed: ${summary.suitabilityReviewed}`
+  );
+
+  console.log(
+    `Suitable: ${summary.suitable}`
+  );
+
+  console.log(
+    `Unsuitable: ${summary.unsuitable}`
+  );
+
+  console.log(
+    `Suitability manual review: ${summary.suitabilityManualReview}`
+  );
+
+  console.log(
+    `Applications processed: ${summary.processed}`
   );
 
   console.log(
@@ -744,7 +791,7 @@ async function runBulkApplications(
   );
 
   console.log(
-    `Manual review: ${summary.manualReview}`
+    `Application manual review: ${summary.applicationManualReview}`
   );
 
   console.log(
@@ -763,36 +810,26 @@ async function runBulkApplications(
     `\nBulk log: ${BULK_LOG_FILE}`
   );
 
-  if (
-    !options.submit
-  ) {
+  if (!options.submit) {
     console.log(
       "\nNo final submissions were authorised by this dry run."
     );
   }
 }
 
-// ==================================================
-// COMMAND LINE
-// ==================================================
-
-if (
-  require.main === module
-) {
+if (require.main === module) {
   let options;
 
   try {
-    options =
-      parseOptions(
-        process.argv.slice(2)
-      );
+    options = parseOptions(
+      process.argv.slice(2)
+    );
   } catch (error) {
     console.error(
       `\nArgument error: ${error.message}`
     );
 
     process.exitCode = 1;
-
     return;
   }
 
@@ -804,19 +841,12 @@ if (
         "\nBulk runner failed before it could continue safely:"
       );
 
-      console.error(
-        error
-      );
+      console.error(error);
 
-      process.exitCode =
-        1;
+      process.exitCode = 1;
     }
   );
 }
-
-// ==================================================
-// EXPORTS
-// ==================================================
 
 module.exports = {
   runBulkApplications,
