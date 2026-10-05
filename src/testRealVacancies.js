@@ -39,6 +39,132 @@ function getLimit() {
   return value;
 }
 
+function printManualReviewSummary(
+  manualReviews
+) {
+  console.log(
+    "\n\n========================================"
+  );
+
+  console.log(
+    "MANUAL REVIEW VACANCIES"
+  );
+
+  console.log(
+    "========================================"
+  );
+
+  if (
+    manualReviews.length === 0
+  ) {
+    console.log(
+      "\nNone."
+    );
+
+    return;
+  }
+
+  console.log(
+    `\nTotal: ${manualReviews.length}`
+  );
+
+  for (
+    let i = 0;
+    i < manualReviews.length;
+    i++
+  ) {
+    const item =
+      manualReviews[i];
+
+    console.log(
+      "\n----------------------------------------"
+    );
+
+    console.log(
+      `MANUAL REVIEW ${i + 1} OF ${manualReviews.length}`
+    );
+
+    console.log(
+      "----------------------------------------"
+    );
+
+    console.log(
+      `Reference: ${
+        item.vacancy.vacancyReference ||
+        "(unknown)"
+      }`
+    );
+
+    console.log(
+      `Title: ${
+        item.vacancy.title ||
+        "(unknown)"
+      }`
+    );
+
+    console.log(
+      `Employer: ${
+        item.vacancy.employerName ||
+        "(unknown)"
+      }`
+    );
+
+    if (
+      item.review.careerMatch
+    ) {
+      console.log(
+        `Career match: ${item.review.careerMatch}`
+      );
+    }
+
+    if (
+      item.review.reason
+    ) {
+      console.log(
+        `Reason: ${item.review.reason}`
+      );
+    }
+
+    if (
+      item.review.blockingRequirements
+        .length > 0
+    ) {
+      console.log(
+        "Blocking requirements:"
+      );
+
+      for (
+        const requirement
+        of item.review
+          .blockingRequirements
+      ) {
+        console.log(
+          `- ${requirement}`
+        );
+      }
+    }
+
+    if (
+      item.review.unresolvedRequirements
+        .length > 0
+    ) {
+      console.log(
+        "Unresolved requirements:"
+      );
+
+      for (
+        const requirement
+        of item.review
+          .unresolvedRequirements
+      ) {
+        console.log(
+          `- ${requirement}`
+        );
+      }
+    }
+  }
+}
+
 async function run() {
   const limit =
     getLimit();
@@ -107,6 +233,8 @@ async function run() {
     errors: 0,
   };
 
+  const manualReviews = [];
+
   for (
     let i = 0;
     i < vacanciesToReview.length;
@@ -128,15 +256,24 @@ async function run() {
     );
 
     console.log(
-      `Reference: ${vacancy.vacancyReference || "(unknown)"}`
+      `Reference: ${
+        vacancy.vacancyReference ||
+        "(unknown)"
+      }`
     );
 
     console.log(
-      `Title: ${vacancy.title || "(unknown)"}`
+      `Title: ${
+        vacancy.title ||
+        "(unknown)"
+      }`
     );
 
     console.log(
-      `Employer: ${vacancy.employerName || "(unknown)"}`
+      `Employer: ${
+        vacancy.employerName ||
+        "(unknown)"
+      }`
     );
 
     try {
@@ -166,6 +303,11 @@ async function run() {
         "manual_review"
       ) {
         summary.manualReview++;
+
+        manualReviews.push({
+          vacancy,
+          review,
+        });
       } else {
         summary.errors++;
 
@@ -235,6 +377,10 @@ async function run() {
 
   console.log(
     "\nNo applications were opened, saved or submitted."
+  );
+
+  printManualReviewSummary(
+    manualReviews
   );
 }
 

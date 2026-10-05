@@ -50,6 +50,8 @@ The applicant wants apprenticeships genuinely centred on one or more of these ar
 - electronics
 - mechanical engineering
 - manufacturing engineering
+- lean manufacturing
+- lean manufacturing operative
 - CNC
 - machining
 - welding
@@ -83,7 +85,69 @@ The applicant wants apprenticeships genuinely centred on one or more of these ar
 A keyword appearing incidentally is not enough.
 The actual apprenticeship duties and training must genuinely fit a target career.
 
+Career fit must be direct, not merely adjacent, related or transferable.
+
+Do NOT treat a vacancy as a target career merely because it shares some skills, technologies or terminology with a target career.
+
+For example:
+
+- cyber security is not automatically software development, software engineering or software testing;
+- IT support is not automatically software development or software testing;
+- helpdesk or service desk work is not automatically software development or software testing;
+- network support or network installation is not automatically software engineering;
+- general IT technician work is not automatically software development or software testing;
+- data entry or data administration is not automatically programming or software development;
+- generic production or manufacturing work is not automatically manufacturing engineering or lean manufacturing;
+- a genuine Lean Manufacturing apprenticeship can qualify when its main occupation and training are specifically centred on lean manufacturing, process improvement, waste reduction, quality, standardised work or continuous improvement in a manufacturing environment;
+- packing, assembly, warehouse or general production work does not qualify merely because the employer mentions lean methods;
+- a role mentioning testing is not automatically software testing;
+- a role mentioning programming is not automatically a software development career if programming is only incidental to the main occupation.
+
+The MAIN occupation, substantial duties and apprenticeship training must genuinely correspond to at least one target career.
+
+"Closely aligned", "related to", "shares skills with", "could lead to", or "has transferable skills for" a target career is NOT sufficient.
+
+If the main occupation is outside the supplied target career list, return "unsuitable".
+
 Reject Armed Forces / military vacancies, including Royal Air Force, RAF, Royal Navy, British Army, Army, Armed Forces, Royal Marines, Ministry of Defence or MOD roles.
+
+==================================================
+AUTOMOTIVE / MOTOR VEHICLE EXCLUSION
+==================================================
+
+Also reject apprenticeships whose actual role or training is primarily centred on motor vehicles or the automotive industry.
+
+This includes, but is not limited to:
+
+- motor vehicle service and maintenance
+- car mechanic roles
+- light vehicle technician roles
+- vehicle technician roles
+- automotive repair
+- vehicle diagnostics
+- vehicle body repair
+- accident repair
+- vehicle paint or refinishing
+- automotive parts roles
+- auto-electrical vehicle repair
+- heavy vehicle or HGV technician roles
+- bus or coach mechanic roles
+- motorcycle technician roles
+- other apprenticeships primarily involving the servicing, repair or maintenance of road vehicles
+
+Return "unsuitable" when the apprenticeship itself is genuinely a vehicle or automotive career.
+
+Do NOT reject an otherwise suitable apprenticeship merely because its description mentions:
+
+- access to a vehicle
+- travelling in a vehicle
+- a company vehicle
+- driving between sites
+- vehicle access as a requirement
+
+Those references must instead be assessed under the separate driving and vehicle-access rules.
+
+Heavy or mobile plant engineering remains a target career when the work is genuinely centred on industrial, construction, mining, quarrying or similar plant machinery rather than ordinary road vehicles.
 
 ==================================================
 ESSENTIAL REQUIREMENTS
@@ -157,15 +221,93 @@ If the requirement cannot be reliably compared with the supplied profile, use "m
 DECISION
 ==================================================
 
+Apply the decision rules in this exact order.
+
+STEP 1 — CAREER FIT AND EXCLUDED CAREERS
+
+First determine the MAIN occupation represented by the vacancy's actual duties and apprenticeship training.
+
+Determine whether that occupation directly and genuinely fits at least one target career.
+
+Do not pass a vacancy merely because it:
+
+- uses some similar skills;
+- uses some of the same technology;
+- contains target-career keywords;
+- could eventually lead to a target career;
+- provides transferable experience;
+- is closely related to a target career.
+
+The apprenticeship itself must genuinely be for a target occupation.
+
+A genuine Lean Manufacturing apprenticeship can pass the career-fit test when lean manufacturing is the actual occupation and training focus.
+
+Examples of relevant Lean Manufacturing duties include:
+
+- continuous improvement;
+- reducing waste;
+- improving manufacturing processes;
+- standardised work;
+- quality improvement;
+- 5S;
+- improving productivity, efficiency or workflow.
+
+Do not use this exception for generic factory, warehouse, packing, assembly or production jobs that only mention lean manufacturing incidentally.
+
+Also determine whether the vacancy belongs to an explicitly excluded career category, including Armed Forces / military roles and automotive / motor vehicle roles described above.
+
+If the vacancy belongs to an explicitly excluded career category:
+
+- return "unsuitable";
+- do not return "manual_review";
+- do not continue evaluating uncertain qualifications, driving requirements or other entry requirements merely to decide the status.
+
+If the actual duties and training do NOT genuinely fit at least one target career:
+
+- return "unsuitable";
+- do not return "manual_review";
+- do not continue evaluating uncertain qualifications, driving requirements or other entry requirements merely to decide the status.
+
+A vacancy outside the target careers is already unsuitable even if some of its entry requirements cannot be verified.
+
+Do not use "manual_review" to ask whether a non-target career might nevertheless be acceptable.
+
+The target career list and explicit exclusions supplied above are authoritative for this decision.
+
+STEP 2 — CLEARLY FAILED ESSENTIAL REQUIREMENTS
+
+Only if the vacancy passes the career-fit and excluded-career tests, check its explicit essential requirements.
+
+If an explicit essential requirement is clearly contradicted by the verified profile:
+
+- return "unsuitable".
+
+Examples include:
+
+- an essential driving licence when the applicant does not have one;
+- essential access to a vehicle when the profile does not establish that access;
+- an essential qualification that the verified profile clearly establishes the applicant does not hold.
+
+STEP 3 — UNRESOLVED ESSENTIAL REQUIREMENTS
+
+Only if the vacancy passes the career-fit test, is not an excluded career, and has no clearly failed essential requirement, determine whether any essential requirement cannot safely be verified from the supplied profile.
+
+If an essential requirement cannot reliably be verified:
+
+- return "manual_review";
+- identify the unresolved requirement;
+- do not guess;
+- do not invent qualification equivalencies;
+- do not use manual review to reconsider whether an unrelated career should be accepted.
+
+STEP 4 — SUITABLE
+
 Return "suitable" only when:
 
-- the actual role genuinely fits at least one target career;
+- the actual role genuinely and directly fits at least one target career;
+- the role is not in an explicitly excluded career category;
 - there is no explicit essential requirement contradicted by the verified profile; and
 - there is no unresolved essential requirement requiring human judgement.
-
-Return "unsuitable" when there is a clear factual reason not to apply automatically.
-
-Return "manual_review" when suitability cannot be established safely from the supplied information.
 
 Keep reasons concise and factual.
 Do not rank vacancies.
@@ -247,6 +389,31 @@ TASK
 
 Decide whether this vacancy is safe and suitable to pass to the automatic application system.
 
+Follow the decision order in the system instructions.
+
+First identify the vacancy's MAIN occupation from its actual duties and apprenticeship training.
+
+Then determine whether that occupation DIRECTLY fits one of the supplied target careers.
+
+Do not accept adjacent or merely related careers.
+
+In particular:
+
+- cyber security is not automatically software development, software engineering or software testing;
+- generic IT support is not automatically software development or software testing;
+- helpdesk and service desk roles are not automatically software careers;
+- network installation or network support is not automatically software engineering;
+- general production work is not automatically manufacturing engineering or lean manufacturing;
+- a genuine Lean Manufacturing apprenticeship can qualify when lean manufacturing and continuous improvement are the actual occupation and training focus;
+- generic factory, packing, assembly or warehouse work does not qualify merely because lean terminology appears in the vacancy;
+- merely mentioning testing does not make a role software testing.
+
+Reject unrelated careers even if an incidental keyword caused the vacancy to reach this reviewer.
+
+Reject automotive and motor vehicle apprenticeships as instructed, while distinguishing them from otherwise suitable roles that merely mention a vehicle or driving requirement.
+
+Only after direct career fit has been established should unresolved essential entry requirements cause manual review.
+
 Check the real duties and training, not just the title or isolated keywords.
 
 Check all explicit essential requirements against the verified profile.
@@ -255,7 +422,7 @@ Treat distance as acceptable because the applicant can travel where necessary an
 
 Do not infer a driving licence, vehicle access, qualification, experience or eligibility fact that is not in the profile.
 
-If an essential requirement is ambiguous or cannot be verified, use manual_review rather than guessing.
+If a genuine target-career vacancy has an essential requirement that is ambiguous or cannot be verified, use manual_review rather than guessing.
 `;
 }
 
@@ -308,8 +475,6 @@ function validateReview(parsed) {
     );
   }
 
-  // A suitable vacancy must have no known blockers
-  // and no unresolved essential requirements.
   if (
     parsed.status === "suitable" &&
     (
@@ -322,21 +487,6 @@ function validateReview(parsed) {
     );
   }
 
-  // An unsuitable vacancy does NOT always need a
-  // blocking requirement.
-  //
-  // Example:
-  // A Business Administration apprenticeship may be
-  // unsuitable simply because its actual career area
-  // does not match any target career. In that case
-  // blocking_requirements should correctly be empty.
-  //
-  // If there IS an explicit blocker, such as an
-  // essential driving licence or qualification, the
-  // reviewer should place it in blocking_requirements.
-
-  // Manual review must identify what could not be
-  // safely established.
   if (
     parsed.status === "manual_review" &&
     parsed.unresolved_requirements.length === 0

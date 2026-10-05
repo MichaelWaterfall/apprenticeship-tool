@@ -68,10 +68,12 @@ const careerKeywords = [
   "instrumentation technician",
   "mechanical technician",
   "electrical technician",
+  "nuclear",
 
   // Mining / quarry / heavy plant
   "mining",
   "mine",
+  "mineral",
   "mineral processing",
   "quarry",
   "quarrying",
@@ -79,6 +81,8 @@ const careerKeywords = [
   "plant mechanic",
   "plant technician",
   "mobile plant",
+  "chemical",
+  "water",
 
   // Software development
   "software",

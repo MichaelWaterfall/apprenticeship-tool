@@ -306,6 +306,274 @@ const TEST_CASES = [
       },
     },
   },
+
+  {
+    name: "CYBER SECURITY IS NOT A TARGET CAREER",
+
+    expectedStatus: "unsuitable",
+
+    vacancy: {
+      vacancyReference: "TEST006",
+
+      title:
+        "Cyber Security Engineer Apprentice",
+
+      employerName:
+        "TEST CYBER SECURITY LTD",
+
+      description:
+        `
+        Work with a cyber security team protecting
+        systems, networks and cloud infrastructure.
+        `,
+
+      fullDescription:
+        `
+        You will monitor security alerts, investigate
+        potential cyber threats, support vulnerability
+        management, help secure cloud infrastructure,
+        review security events and assist with incident
+        response.
+
+        You may use technologies including Python,
+        Linux, Azure, AWS and PowerShell as part of
+        your cyber security work.
+        `,
+
+      trainingDescription:
+        `
+        You will complete a Level 4 Cyber Security
+        Technologist apprenticeship.
+        `,
+
+      thingsToConsider:
+        "",
+
+      qualifications: [],
+
+      skills: [
+        "IT skills",
+        "Problem solving skills",
+        "Analytical skills",
+      ],
+
+      course: {
+        title:
+          "Cyber Security Technologist",
+        level: 4,
+        route:
+          "Digital",
+        type:
+          "Standard",
+      },
+    },
+  },
+
+  {
+    name: "GENERIC IT SUPPORT IS NOT SOFTWARE DEVELOPMENT",
+
+    expectedStatus: "unsuitable",
+
+    vacancy: {
+      vacancyReference: "TEST007",
+
+      title:
+        "IT Support Apprentice",
+
+      employerName:
+        "TEST IT SERVICES LTD",
+
+      description:
+        `
+        Provide first-line IT support to users across
+        the organisation.
+        `,
+
+      fullDescription:
+        `
+        You will respond to IT support requests,
+        troubleshoot laptops and desktop computers,
+        reset passwords, create user accounts,
+        install standard software, configure devices,
+        support Microsoft 365 and escalate technical
+        incidents when necessary.
+
+        You may test software installations and
+        troubleshoot applications as part of providing
+        user support.
+
+        The main occupation is IT support.
+        `,
+
+      trainingDescription:
+        `
+        You will complete the Level 3 Information
+        Communications Technician apprenticeship.
+        `,
+
+      thingsToConsider:
+        "",
+
+      qualifications: [],
+
+      skills: [
+        "IT skills",
+        "Customer care skills",
+        "Problem solving skills",
+      ],
+
+      course: {
+        title:
+          "Information Communications Technician",
+        level: 3,
+        route:
+          "Digital",
+        type:
+          "Standard",
+      },
+    },
+  },
+
+  {
+    name: "MOTOR VEHICLE APPRENTICESHIP EXCLUDED",
+
+    expectedStatus: "unsuitable",
+
+    vacancy: {
+      vacancyReference: "TEST008",
+
+      title:
+        "Motor Vehicle Technician Apprentice",
+
+      employerName:
+        "TEST MOTORS LTD",
+
+      description:
+        `
+        Train as a motor vehicle technician servicing
+        and repairing cars.
+        `,
+
+      fullDescription:
+        `
+        You will inspect, service, diagnose and repair
+        cars and light vehicles.
+
+        Duties include routine servicing, brake work,
+        vehicle diagnostics, replacing mechanical
+        components and identifying electrical and
+        mechanical vehicle faults.
+        `,
+
+      trainingDescription:
+        `
+        You will complete a Light Vehicle Service and
+        Maintenance Technician apprenticeship.
+        `,
+
+      thingsToConsider:
+        "",
+
+      qualifications: [],
+
+      skills: [
+        "Problem solving skills",
+        "Mechanical skills",
+      ],
+
+      course: {
+        title:
+          "Motor Vehicle Service and Maintenance Technician",
+        level: 3,
+        route:
+          "Engineering and manufacturing",
+        type:
+          "Standard",
+      },
+    },
+  },
+
+  {
+    name: "GENUINE LEAN MANUFACTURING APPRENTICESHIP",
+
+    expectedStatus: "suitable",
+
+    vacancy: {
+      vacancyReference: "TEST009",
+
+      title:
+        "Lean Manufacturing Apprentice",
+
+      employerName:
+        "TEST MANUFACTURING LTD",
+
+      description:
+        `
+        Train in lean manufacturing and continuous
+        improvement within a manufacturing environment.
+        `,
+
+      fullDescription:
+        `
+        You will work within the manufacturing team
+        learning lean manufacturing principles and
+        supporting improvements to production processes.
+
+        Your duties will include identifying waste,
+        supporting continuous improvement activities,
+        following standardised working procedures,
+        monitoring quality, using 5S techniques and
+        helping improve manufacturing efficiency.
+
+        You will learn how manufacturing processes
+        operate and how lean techniques can be used
+        to improve quality, productivity and workflow.
+        `,
+
+      trainingDescription:
+        `
+        You will complete the Lean Manufacturing
+        Operative apprenticeship and receive workplace
+        training in lean manufacturing methods,
+        continuous improvement, quality and
+        manufacturing processes.
+        `,
+
+      thingsToConsider:
+        "",
+
+      qualifications: [
+        {
+          qualificationType: "GCSE",
+          subject: "English",
+          grade: "4",
+          weight: "Essential",
+        },
+        {
+          qualificationType: "GCSE",
+          subject: "Maths",
+          grade: "4",
+          weight: "Essential",
+        },
+      ],
+
+      skills: [
+        "Problem solving skills",
+        "Attention to detail",
+        "Team working",
+      ],
+
+      course: {
+        title:
+          "Lean Manufacturing Operative",
+        level: 2,
+        route:
+          "Engineering and manufacturing",
+        type:
+          "Standard",
+      },
+    },
+  },
 ];
 
 async function runTests() {
