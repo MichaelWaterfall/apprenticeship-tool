@@ -3,19 +3,16 @@ const fs = require("fs");
 const path = require("path");
 
 const { findVacancy } = require("../finder");
-
 const {
   generateApplicationAnswers,
   printPreview,
 } = require("../answerGenerator");
-
 const {
   reviewApplication,
   printReview,
 } = require("../applicationReviewer");
 
 const AUTH_FILE = "playwright/.auth/govuk.json";
-
 const APPLICATION_LOG_FILE = path.join(
   __dirname,
   "..",
@@ -23,154 +20,92 @@ const APPLICATION_LOG_FILE = path.join(
   "data",
   "application-log.json"
 );
-
 const BROWSER_OPEN_TIME = 300000;
-
-// ==================================================
-// WAIT FOR ENTER
-// ==================================================
 
 function waitForEnter(message) {
   return new Promise((resolve) => {
     console.log(message);
-
     process.stdin.resume();
-
-    process.stdin.once("data", () => {
-      resolve();
-    });
+    process.stdin.once("data", () => resolve());
   });
 }
 
-// ==================================================
-// TEXT
-// ==================================================
-
 function normaliseText(value) {
-  return String(value || "")
-    .replace(/\s+/g, " ")
-    .trim();
+  return String(value || "").replace(/\s+/g, " ").trim();
 }
-
-// ==================================================
-// SIGNED OUT
-// ==================================================
 
 async function isSignedOut(page) {
-  const signInControl =
-    page.getByText(
-      /^sign in or create an account$/i
+  // A signed-out vacancy page contains a link to /signin.
+  const signInLinks = page.locator('a[href*="/signin"]');
+
+  if ((await signInLinks.count()) > 0) {
+    return true;
+  }
+
+  // GOV.UK currently shows this wording inside the Apply section
+  // when the saved authentication session has expired.
+  const applySection = page.locator("#apply").first();
+
+  if ((await applySection.count()) > 0) {
+    const applyText = normaliseText(
+      await applySection.innerText().catch(() => "")
     );
 
-  return (
-    (await signInControl.count()) >
-    0
-  );
+    if (/sign in or create an account/i.test(applyText)) {
+      return true;
+    }
+  }
+
+  // Fallback in case the sign-in link structure changes.
+  const signInControls = page.getByRole("link", {
+    name: /sign in or create an account/i,
+  });
+
+  if ((await signInControls.count()) > 0) {
+    return true;
+  }
+
+  return false;
 }
 
-// ==================================================
-// APPLICATION CONTROL
-// ==================================================
-
 async function getApplicationControl(page) {
-  // Prefer the real application button.
+  const applicationButtons = page.getByRole("button", {
+    name: /^(apply for apprenticeship|apply now|continue application|continue your application)$/i,
+  });
 
-  const applicationButtons =
-    page.getByRole(
-      "button",
-      {
-        name:
-          /^(apply for apprenticeship|apply now|continue application|continue your application)$/i,
-      }
-    );
-
-  if (
-    (await applicationButtons.count()) >
-    0
-  ) {
+  if ((await applicationButtons.count()) > 0) {
     return applicationButtons.first();
   }
 
-  // Do NOT include "Apply now" here.
-  // The vacancy page contains an Apply now anchor
-  // which only jumps to #apply.
+  // Deliberately exclude the vacancy-page "Apply now" anchor here.
+  // That link only jumps to #apply on the same page.
+  const applicationLinks = page.getByRole("link", {
+    name: /^(apply for apprenticeship|continue application|continue your application)$/i,
+  });
 
-  const applicationLinks =
-    page.getByRole(
-      "link",
-      {
-        name:
-          /^(apply for apprenticeship|continue application|continue your application)$/i,
-      }
-    );
-
-  if (
-    (await applicationLinks.count()) >
-    0
-  ) {
+  if ((await applicationLinks.count()) > 0) {
     return applicationLinks.first();
   }
 
   return null;
 }
 
-// ==================================================
-// EXTERNAL APPLICATION DETECTION
-// ==================================================
+async function getExternalApplication(page) {
+  const applySection = page.locator("#apply").first();
 
-async function getExternalApplication(
-  page
-) {
-  const applySection =
-    page
-      .locator("#apply")
-      .first();
-
-  if (
-    (await applySection.count()) ===
-    0
-  ) {
+  if ((await applySection.count()) === 0) {
     return null;
   }
 
-  const currentHost =
-    new URL(
-      page.url()
-    ).hostname;
+  const currentHost = new URL(page.url()).hostname;
 
-  // ------------------------------------------------
-  // EXTERNAL LINKS
-  // ------------------------------------------------
+  const links = applySection.locator("a[href]");
+  const linkCount = await links.count();
 
-  const links =
-    applySection.locator(
-      "a[href]"
-    );
-
-  const linkCount =
-    await links.count();
-
-  for (
-    let i = 0;
-    i < linkCount;
-    i++
-  ) {
-    const link =
-      links.nth(i);
-
-    const href =
-      await link.getAttribute(
-        "href"
-      );
-
-    const text =
-      normaliseText(
-        await link
-          .textContent()
-          .catch(
-            () => ""
-          )
-      );
+  for (let i = 0; i < linkCount; i++) {
+    const link = links.nth(i);
+    const href = await link.getAttribute("href");
+    const text = normaliseText(await link.textContent().catch(() => ""));
 
     if (!href) {
       continue;
@@ -179,53 +114,29 @@ async function getExternalApplication(
     let destination;
 
     try {
-      destination =
-        new URL(
-          href,
-          page.url()
-        );
+      destination = new URL(href, page.url());
     } catch {
       continue;
     }
 
     if (
-      destination.hostname !==
-        currentHost &&
+      destination.hostname !== currentHost &&
       /apply/i.test(text)
     ) {
       return {
         type: "link",
         text,
-        url:
-          destination.href,
+        url: destination.href,
       };
     }
   }
 
-  // ------------------------------------------------
-  // EXTERNAL FORMS
-  // ------------------------------------------------
+  const forms = applySection.locator("form[action]");
+  const formCount = await forms.count();
 
-  const forms =
-    applySection.locator(
-      "form[action]"
-    );
-
-  const formCount =
-    await forms.count();
-
-  for (
-    let i = 0;
-    i < formCount;
-    i++
-  ) {
-    const form =
-      forms.nth(i);
-
-    const action =
-      await form.getAttribute(
-        "action"
-      );
+  for (let i = 0; i < formCount; i++) {
+    const form = forms.nth(i);
+    const action = await form.getAttribute("action");
 
     if (!action) {
       continue;
@@ -234,25 +145,16 @@ async function getExternalApplication(
     let destination;
 
     try {
-      destination =
-        new URL(
-          action,
-          page.url()
-        );
+      destination = new URL(action, page.url());
     } catch {
       continue;
     }
 
-    if (
-      destination.hostname !==
-      currentHost
-    ) {
+    if (destination.hostname !== currentHost) {
       return {
         type: "form",
-        text:
-          "External application form",
-        url:
-          destination.href,
+        text: "External application form",
+        url: destination.href,
       };
     }
   }
@@ -260,51 +162,22 @@ async function getExternalApplication(
   return null;
 }
 
-// ==================================================
-// VACANCY REFERENCE
-// ==================================================
-
-function normaliseVacancyReference(
-  reference
-) {
-  return String(
-    reference || ""
-  )
-    .trim()
-    .replace(
-      /^VAC/i,
-      ""
-    );
+function normaliseVacancyReference(reference) {
+  return String(reference || "").trim().replace(/^VAC/i, "");
 }
 
-function getVacancyReferenceFromUrl(
-  vacancyUrl
-) {
+function getVacancyReferenceFromUrl(vacancyUrl) {
   let parsed;
 
   try {
-    parsed =
-      new URL(
-        String(
-          vacancyUrl
-        )
-      );
+    parsed = new URL(String(vacancyUrl));
   } catch {
-    throw new Error(
-      "The supplied apprenticeship URL is not valid."
-    );
+    throw new Error("The supplied apprenticeship URL is not valid.");
   }
 
-  // Supports:
-  //
-  // /apprenticeship/reference/2000054368
-  //
-  // /apprenticeship/VAC2000053529
-
-  const match =
-    parsed.pathname.match(
-      /\/apprenticeship\/(?:reference\/)?(?:VAC)?(\d+)\/?$/i
-    );
+  const match = parsed.pathname.match(
+    /\/apprenticeship\/(?:reference\/)?(?:VAC)?(\d+)\/?$/i
+  );
 
   if (!match) {
     throw new Error(
@@ -312,59 +185,27 @@ function getVacancyReferenceFromUrl(
     );
   }
 
-  return normaliseVacancyReference(
-    match[1]
-  );
+  return normaliseVacancyReference(match[1]);
 }
 
-// ==================================================
-// BUILD GOV.UK URL
-// ==================================================
-
-function buildGovUkVacancyUrl(
-  vacancyReference
-) {
-  const reference =
-    normaliseVacancyReference(
-      vacancyReference
-    );
-
-  return (
-    "https://www.findapprenticeship.service.gov.uk/" +
-    `apprenticeship/VAC${reference}`
-  );
+function buildGovUkVacancyUrl(vacancyReference) {
+  return `https://www.findapprenticeship.service.gov.uk/apprenticeship/VAC${normaliseVacancyReference(
+    vacancyReference
+  )}`;
 }
 
-// ==================================================
-// RESOLVE VACANCY INPUT
-// ==================================================
-
-async function resolveVacancyInput(
-  vacancyInput
-) {
-  // ------------------------------------------------
-  // FULL VACANCY OBJECT
-  // ------------------------------------------------
-
+async function resolveVacancyInput(vacancyInput) {
   if (
     vacancyInput &&
-    typeof vacancyInput ===
-      "object" &&
-    !Array.isArray(
-      vacancyInput
-    )
+    typeof vacancyInput === "object" &&
+    !Array.isArray(vacancyInput)
   ) {
-    const vacancy =
-      vacancyInput;
+    const vacancy = vacancyInput;
+    const vacancyReference = normaliseVacancyReference(
+      vacancy.vacancyReference
+    );
 
-    const vacancyReference =
-      normaliseVacancyReference(
-        vacancy.vacancyReference
-      );
-
-    if (
-      !vacancyReference
-    ) {
+    if (!vacancyReference) {
       throw new Error(
         "The supplied vacancy object does not contain a vacancyReference."
       );
@@ -372,41 +213,18 @@ async function resolveVacancyInput(
 
     return {
       vacancy,
-
       vacancyReference,
-
-      vacancyUrl:
-        buildGovUkVacancyUrl(
-          vacancyReference
-        ),
-
-      source:
-        "vacancy_object",
+      vacancyUrl: buildGovUkVacancyUrl(vacancyReference),
+      source: "vacancy_object",
     };
   }
 
-  // ------------------------------------------------
-  // URL
-  // ------------------------------------------------
+  const vacancyUrl = String(vacancyInput || "").trim();
+  const vacancyReference = getVacancyReferenceFromUrl(vacancyUrl);
 
-  const vacancyUrl =
-    String(
-      vacancyInput || ""
-    ).trim();
+  console.log("\nGetting full vacancy information...");
 
-  const vacancyReference =
-    getVacancyReferenceFromUrl(
-      vacancyUrl
-    );
-
-  console.log(
-    "\nGetting full vacancy information..."
-  );
-
-  const vacancy =
-    await findVacancy({
-      vacancyReference,
-    });
+  const vacancy = await findVacancy({ vacancyReference });
 
   if (!vacancy) {
     throw new Error(
@@ -418,472 +236,194 @@ async function resolveVacancyInput(
     vacancy,
     vacancyReference,
     vacancyUrl,
-    source:
-      "vacancy_url",
+    source: "vacancy_url",
   };
 }
 
-// ==================================================
-// QUESTION TEXT
-// ==================================================
+async function getQuestionText(page) {
+  const heading = page.locator("h1").first();
+  await heading.waitFor({ state: "visible" });
 
-async function getQuestionText(
-  page
-) {
-  const heading =
-    page
-      .locator("h1")
-      .first();
-
-  await heading.waitFor({
-    state: "visible",
-  });
-
-  const question =
-    normaliseText(
-      await heading.textContent()
-    );
+  const question = normaliseText(await heading.textContent());
 
   if (!question) {
-    throw new Error(
-      "Could not read the application question."
-    );
+    throw new Error("Could not read the application question.");
   }
 
   return question;
 }
 
-// ==================================================
-// PAGE DIAGNOSTICS
-// ==================================================
-
-async function printPageDiagnostics(
-  page
-) {
-  console.log(
-    "\n========================================"
-  );
-
-  console.log(
-    "PAGE DIAGNOSTICS"
-  );
-
-  console.log(
-    "========================================"
-  );
-
-  console.log(
-    `\nURL:\n${page.url()}`
-  );
+async function printPageDiagnostics(page) {
+  console.log("\n========================================");
+  console.log("PAGE DIAGNOSTICS");
+  console.log("========================================");
+  console.log(`\nURL:\n${page.url()}`);
 
   try {
-    console.log(
-      `\nTITLE:\n${await page.title()}`
-    );
+    console.log(`\nTITLE:\n${await page.title()}`);
   } catch {
-    console.log(
-      "\nTITLE:\nCould not read title."
-    );
+    console.log("\nTITLE:\nCould not read title.");
   }
-
-  // ------------------------------------------------
-  // HEADINGS
-  // ------------------------------------------------
 
   try {
-    const headings =
-      (
-        await page
-          .locator(
-            "h1, h2, h3"
-          )
-          .allTextContents()
-      )
-        .map(
-          normaliseText
-        )
-        .filter(Boolean);
+    const headings = (await page.locator("h1, h2, h3").allTextContents())
+      .map(normaliseText)
+      .filter(Boolean);
 
+    console.log("\nHEADINGS:");
     console.log(
-      "\nHEADINGS:"
+      headings.length
+        ? headings.map((x) => `- ${x}`).join("\n")
+        : "(none)"
     );
-
-    if (
-      headings.length === 0
-    ) {
-      console.log(
-        "(none)"
-      );
-    } else {
-      for (
-        const heading
-        of headings
-      ) {
-        console.log(
-          `- ${heading}`
-        );
-      }
-    }
   } catch {
-    console.log(
-      "\nCould not inspect headings."
-    );
+    console.log("\nCould not inspect headings.");
   }
-
-  // ------------------------------------------------
-  // LEGENDS
-  // ------------------------------------------------
 
   try {
-    const legends =
-      (
-        await page
-          .locator(
-            "legend"
-          )
-          .allTextContents()
-      )
-        .map(
-          normaliseText
-        )
-        .filter(Boolean);
+    const legends = (await page.locator("legend").allTextContents())
+      .map(normaliseText)
+      .filter(Boolean);
 
+    console.log("\nFIELDSET LEGENDS:");
     console.log(
-      "\nFIELDSET LEGENDS:"
+      legends.length
+        ? legends.map((x) => `- ${x}`).join("\n")
+        : "(none)"
     );
-
-    if (
-      legends.length === 0
-    ) {
-      console.log(
-        "(none)"
-      );
-    } else {
-      for (
-        const legend
-        of legends
-      ) {
-        console.log(
-          `- ${legend}`
-        );
-      }
-    }
   } catch {
-    console.log(
-      "\nCould not inspect fieldset legends."
-    );
+    console.log("\nCould not inspect fieldset legends.");
   }
-
-  // ------------------------------------------------
-  // BUTTONS
-  // ------------------------------------------------
 
   try {
-    const buttons =
-      await page
-        .locator(
-          'button, input[type="submit"]'
-        )
-        .evaluateAll(
-          (elements) =>
-            elements
-              .map(
-                (element) =>
-                  (
-                    element.innerText ||
-                    element.value ||
-                    element.getAttribute(
-                      "aria-label"
-                    ) ||
-                    ""
-                  )
-                    .replace(
-                      /\s+/g,
-                      " "
-                    )
-                    .trim()
-              )
-              .filter(
-                Boolean
-              )
-        );
-
-    console.log(
-      "\nVISIBLE BUTTON / SUBMIT TEXT:"
-    );
-
-    if (
-      buttons.length === 0
-    ) {
-      console.log(
-        "(none)"
-      );
-    } else {
-      for (
-        const button
-        of buttons
-      ) {
-        console.log(
-          `- ${button}`
-        );
-      }
-    }
-  } catch {
-    console.log(
-      "\nCould not inspect buttons."
-    );
-  }
-
-  // ------------------------------------------------
-  // LINKS
-  // ------------------------------------------------
-
-  try {
-    const links =
-      await page
-        .locator(
-          "a[href]"
-        )
-        .evaluateAll(
-          (anchors) =>
-            anchors
-              .map(
-                (anchor) => ({
-                  text:
-                    (
-                      anchor.innerText ||
-                      ""
-                    )
-                      .replace(
-                        /\s+/g,
-                        " "
-                      )
-                      .trim(),
-
-                  href:
-                    anchor.href ||
-                    "",
-                })
-              )
-              .filter(
-                (item) =>
-                  item.text
-              )
-        );
-
-    console.log(
-      "\nVISIBLE LINKS:"
-    );
-
-    if (
-      links.length === 0
-    ) {
-      console.log(
-        "(none)"
-      );
-    } else {
-      for (
-        const link
-        of links
-      ) {
-        console.log(
-          `- ${link.text}`
-        );
-
-        console.log(
-          `  ${link.href}`
-        );
-      }
-    }
-  } catch {
-    console.log(
-      "\nCould not inspect links."
-    );
-  }
-
-  console.log(
-    "\n========================================"
-  );
-}
-
-// ==================================================
-// QUESTION LINKS
-// ==================================================
-
-async function getQuestionLinks(
-  page
-) {
-  return page
-    .locator(
-      "a[href]"
-    )
-    .evaluateAll(
-      (anchors) => {
-        const results =
-          [];
-
-        for (
-          const anchor
-          of anchors
-        ) {
-          const href =
-            anchor.href ||
-            "";
-
-          const lower =
-            href.toLowerCase();
-
-          const isWrittenQuestion =
-            lower.includes(
-              "/skillsandstrengths"
-            ) ||
-            lower.includes(
-              "/what-interests-you"
-            ) ||
-            lower.includes(
-              "/additional-question/"
-            );
-
-          if (
-            isWrittenQuestion &&
-            !results.includes(
-              href
+    const buttons = await page
+      .locator('button, input[type="submit"]')
+      .evaluateAll((elements) =>
+        elements
+          .map((element) =>
+            (
+              element.innerText ||
+              element.value ||
+              element.getAttribute("aria-label") ||
+              ""
             )
-          ) {
-            results.push(
-              href
-            );
-          }
-        }
+              .replace(/\s+/g, " ")
+              .trim()
+          )
+          .filter(Boolean)
+      );
 
-        return results;
-      }
+    console.log("\nVISIBLE BUTTON / SUBMIT TEXT:");
+    console.log(
+      buttons.length
+        ? buttons.map((x) => `- ${x}`).join("\n")
+        : "(none)"
     );
+  } catch {
+    console.log("\nCould not inspect buttons.");
+  }
+
+  try {
+    const links = await page.locator("a[href]").evaluateAll((anchors) =>
+      anchors
+        .map((anchor) => ({
+          text: (anchor.innerText || "").replace(/\s+/g, " ").trim(),
+          href: anchor.href || "",
+        }))
+        .filter((item) => item.text)
+    );
+
+    console.log("\nVISIBLE LINKS:");
+
+    if (links.length === 0) {
+      console.log("(none)");
+    } else {
+      for (const link of links) {
+        console.log(`- ${link.text}`);
+        console.log(`  ${link.href}`);
+      }
+    }
+  } catch {
+    console.log("\nCould not inspect links.");
+  }
+
+  console.log("\n========================================");
 }
 
-// ==================================================
-// READ QUESTIONS
-// ==================================================
+async function getQuestionLinks(page) {
+  return page.locator("a[href]").evaluateAll((anchors) => {
+    const results = [];
 
-async function readQuestions({
-  page,
-  questionLinks,
-}) {
+    for (const anchor of anchors) {
+      const href = anchor.href || "";
+      const lower = href.toLowerCase();
+
+      const isWrittenQuestion =
+        lower.includes("/skillsandstrengths") ||
+        lower.includes("/what-interests-you") ||
+        lower.includes("/additional-question/");
+
+      if (isWrittenQuestion && !results.includes(href)) {
+        results.push(href);
+      }
+    }
+
+    return results;
+  });
+}
+
+async function readQuestions({ page, questionLinks }) {
   const questions = [];
 
-  console.log(
-    "\nREADING REAL APPLICATION QUESTIONS"
-  );
+  console.log("\nREADING REAL APPLICATION QUESTIONS");
 
-  for (
-    let i = 0;
-    i < questionLinks.length;
-    i++
-  ) {
-    console.log(
-      `Opening question ${i + 1}...`
-    );
+  for (let i = 0; i < questionLinks.length; i++) {
+    console.log(`Opening question ${i + 1}...`);
 
-    await page.goto(
-      questionLinks[i],
-      {
-        waitUntil:
-          "domcontentloaded",
-      }
-    );
+    await page.goto(questionLinks[i], {
+      waitUntil: "domcontentloaded",
+    });
 
-    const question =
-      await getQuestionText(
-        page
-      );
-
-    questions.push(
-      question
-    );
-
-    console.log(
-      `${i + 1}. ${question}`
-    );
+    const question = await getQuestionText(page);
+    questions.push(question);
+    console.log(`${i + 1}. ${question}`);
   }
 
   return questions;
 }
 
-// ==================================================
-// SECTION COMPLETE
-// ==================================================
-
-async function markSectionComplete(
-  page
-) {
+async function markSectionComplete(page) {
   const selectors = [
     'input[name="IsSectionComplete"][value="true"]',
     'input[name="IsSectionCompleted"][value="true"]',
   ];
 
-  for (
-    const selector
-    of selectors
-  ) {
-    const input =
-      page.locator(
-        selector
-      );
+  for (const selector of selectors) {
+    const input = page.locator(selector);
 
-    if (
-      (await input.count()) >
-      0
-    ) {
-      await input
-        .first()
-        .check();
-
+    if ((await input.count()) > 0) {
+      await input.first().check();
       return;
     }
   }
 
-  throw new Error(
-    "Could not find the section-complete control."
-  );
+  throw new Error("Could not find the section-complete control.");
 }
 
-// ==================================================
-// QUESTION CONTINUE
-// ==================================================
+async function clickContinue(page) {
+  const button = page
+    .getByRole("button", {
+      name: /^continue$/i,
+    })
+    .first();
 
-async function clickContinue(
-  page
-) {
-  const button =
-    page
-      .getByRole(
-        "button",
-        {
-          name:
-            /^continue$/i,
-        }
-      )
-      .first();
-
-  if (
-    (await button.count()) ===
-    0
-  ) {
-    throw new Error(
-      "Could not find the Continue button."
-    );
+  if ((await button.count()) === 0) {
+    throw new Error("Could not find the Continue button.");
   }
 
   await button.click();
-
-  await page.waitForLoadState(
-    "domcontentloaded"
-  );
+  await page.waitForLoadState("domcontentloaded");
 }
-
-// ==================================================
-// FILL QUESTION
-// ==================================================
 
 async function fillQuestion({
   page,
@@ -892,31 +432,15 @@ async function fillQuestion({
   answer,
   questionNumber,
 }) {
-  console.log(
-    `\nFilling question ${questionNumber}...`
-  );
+  console.log(`\nFilling question ${questionNumber}...`);
 
-  await page.goto(
-    questionUrl,
-    {
-      waitUntil:
-        "domcontentloaded",
-    }
-  );
+  await page.goto(questionUrl, {
+    waitUntil: "domcontentloaded",
+  });
 
-  const liveQuestion =
-    await getQuestionText(
-      page
-    );
+  const liveQuestion = await getQuestionText(page);
 
-  if (
-    normaliseText(
-      liveQuestion
-    ) !==
-    normaliseText(
-      expectedQuestion
-    )
-  ) {
+  if (normaliseText(liveQuestion) !== normaliseText(expectedQuestion)) {
     throw new Error(
       [
         `Question ${questionNumber} changed before filling.`,
@@ -926,84 +450,41 @@ async function fillQuestion({
     );
   }
 
-  const textareas =
-    page.locator(
-      "textarea"
-    );
+  const textareas = page.locator("textarea");
+  const textareaCount = await textareas.count();
 
-  const textareaCount =
-    await textareas.count();
-
-  if (
-    textareaCount !== 1
-  ) {
+  if (textareaCount !== 1) {
     throw new Error(
       `Expected exactly one textarea for question ${questionNumber}, but found ${textareaCount}.`
     );
   }
 
-  const textarea =
-    textareas.first();
+  const textarea = textareas.first();
 
-  await textarea.fill(
-    answer
-  );
+  await textarea.fill(answer);
 
-  const filledValue =
-    await textarea.inputValue();
-
-  if (
-    filledValue !==
-    answer
-  ) {
+  if ((await textarea.inputValue()) !== answer) {
     throw new Error(
       `Textarea verification failed for question ${questionNumber}.`
     );
   }
 
-  await markSectionComplete(
-    page
-  );
+  await markSectionComplete(page);
+  await clickContinue(page);
 
-  await clickContinue(
-    page
-  );
-
-  console.log(
-    `Question ${questionNumber} saved.`
-  );
+  console.log(`Question ${questionNumber} saved.`);
 }
-
-// ==================================================
-// OVERVIEW CONTINUE
-// ==================================================
 
 async function clickOverviewContinue({
   page,
   overviewUrl,
 }) {
-  console.log(
-    "\nChecking overview Continue link..."
-  );
+  console.log("\nChecking overview Continue link...");
 
-  const currentUrl =
-    page
-      .url()
-      .replace(
-        /\/$/,
-        ""
-      );
+  const currentUrl = page.url().replace(/\/$/, "");
+  const expectedOverviewUrl = overviewUrl.replace(/\/$/, "");
 
-  const expectedOverviewUrl =
-    overviewUrl.replace(
-      /\/$/,
-      ""
-    );
-
-  if (
-    currentUrl !==
-    expectedOverviewUrl
-  ) {
+  if (currentUrl !== expectedOverviewUrl) {
     throw new Error(
       [
         "Expected to be on the application overview before advancing.",
@@ -1013,33 +494,20 @@ async function clickOverviewContinue({
     );
   }
 
-  const continueLinks =
-    page.getByRole(
-      "link",
-      {
-        name:
-          /^continue$/i,
-      }
-    );
+  const continueLinks = page.getByRole("link", {
+    name: /^continue$/i,
+  });
 
-  const continueCount =
-    await continueLinks.count();
+  const continueCount = await continueLinks.count();
 
-  if (
-    continueCount !== 1
-  ) {
+  if (continueCount !== 1) {
     throw new Error(
       `Expected exactly one Continue link on the application overview, but found ${continueCount}.`
     );
   }
 
-  const continueLink =
-    continueLinks.first();
-
-  const href =
-    await continueLink.getAttribute(
-      "href"
-    );
+  const continueLink = continueLinks.first();
+  const href = await continueLink.getAttribute("href");
 
   if (!href) {
     throw new Error(
@@ -1047,24 +515,14 @@ async function clickOverviewContinue({
     );
   }
 
-  const expectedPreviewUrl =
-    `${expectedOverviewUrl}/preview`;
+  const expectedPreviewUrl = `${expectedOverviewUrl}/preview`;
 
-  const actualDestination =
-    new URL(
-      href,
-      page.url()
-    )
-      .href
-      .replace(
-        /\/$/,
-        ""
-      );
+  const actualDestination = new URL(
+    href,
+    page.url()
+  ).href.replace(/\/$/, "");
 
-  if (
-    actualDestination !==
-    expectedPreviewUrl
-  ) {
+  if (actualDestination !== expectedPreviewUrl) {
     throw new Error(
       [
         "The overview Continue link points somewhere unexpected.",
@@ -1074,32 +532,17 @@ async function clickOverviewContinue({
     );
   }
 
-  console.log(
-    "Overview Continue link verified."
-  );
-
+  console.log("Overview Continue link verified.");
   console.log(
     "Destination verified as this application's /preview page."
   );
 
   await continueLink.click();
+  await page.waitForLoadState("domcontentloaded");
 
-  await page.waitForLoadState(
-    "domcontentloaded"
-  );
+  const arrivedUrl = page.url().replace(/\/$/, "");
 
-  const arrivedUrl =
-    page
-      .url()
-      .replace(
-        /\/$/,
-        ""
-      );
-
-  if (
-    arrivedUrl !==
-    expectedPreviewUrl
-  ) {
+  if (arrivedUrl !== expectedPreviewUrl) {
     throw new Error(
       [
         "Continue link did not arrive at the expected preview page.",
@@ -1109,41 +552,23 @@ async function clickOverviewContinue({
     );
   }
 
-  console.log(
-    "Application preview page opened."
-  );
+  console.log("Application preview page opened.");
 }
-
-// ==================================================
-// RETURN TO OVERVIEW
-// ==================================================
 
 async function returnToOverview({
   page,
   overviewUrl,
 }) {
-  await page.goto(
-    overviewUrl,
-    {
-      waitUntil:
-        "domcontentloaded",
-    }
-  );
+  await page.goto(overviewUrl, {
+    waitUntil: "domcontentloaded",
+  });
 }
-
-// ==================================================
-// AUTH
-// ==================================================
 
 async function saveAuthStateIfSignedIn(
   context,
   page
 ) {
-  if (
-    await isSignedOut(
-      page
-    )
-  ) {
+  if (await isSignedOut(page)) {
     console.log(
       "\nSigned-out page detected. Existing auth file will NOT be overwritten."
     );
@@ -1158,10 +583,6 @@ async function saveAuthStateIfSignedIn(
   return true;
 }
 
-// ==================================================
-// KEEP OPEN
-// ==================================================
-
 async function keepBrowserOpen(
   page,
   enabled = true
@@ -1174,36 +595,23 @@ async function keepBrowserOpen(
     "\nBrowser will remain open for 5 minutes for inspection."
   );
 
-  await page.waitForTimeout(
-    BROWSER_OPEN_TIME
-  );
+  await page.waitForTimeout(BROWSER_OPEN_TIME);
 }
 
-// ==================================================
-// APPLICATION LOG
-// ==================================================
-
 function readApplicationLog() {
-  if (
-    !fs.existsSync(
-      APPLICATION_LOG_FILE
-    )
-  ) {
+  if (!fs.existsSync(APPLICATION_LOG_FILE)) {
     return [];
   }
 
   try {
-    const parsed =
-      JSON.parse(
-        fs.readFileSync(
-          APPLICATION_LOG_FILE,
-          "utf8"
-        )
-      );
+    const parsed = JSON.parse(
+      fs.readFileSync(
+        APPLICATION_LOG_FILE,
+        "utf8"
+      )
+    );
 
-    return Array.isArray(
-      parsed
-    )
+    return Array.isArray(parsed)
       ? parsed
       : [];
   } catch (error) {
@@ -1213,13 +621,9 @@ function readApplicationLog() {
   }
 }
 
-function writeApplicationLog(
-  records
-) {
+function writeApplicationLog(records) {
   fs.mkdirSync(
-    path.dirname(
-      APPLICATION_LOG_FILE
-    ),
+    path.dirname(APPLICATION_LOG_FILE),
     {
       recursive: true,
     }
@@ -1236,30 +640,20 @@ function writeApplicationLog(
   );
 }
 
-function getSubmissionRecord(
-  vacancyReference
-) {
+function getSubmissionRecord(vacancyReference) {
   const wantedReference =
-    normaliseVacancyReference(
-      vacancyReference
-    );
+    normaliseVacancyReference(vacancyReference);
 
-  const records =
-    readApplicationLog();
-
-  return records
+  return readApplicationLog()
     .filter(
       (record) =>
         normaliseVacancyReference(
           record.vacancyReference
-        ) ===
-          wantedReference &&
+        ) === wantedReference &&
         [
           "submission_attempted",
           "submitted",
-        ].includes(
-          record.status
-        )
+        ].includes(record.status)
     )
     .at(-1);
 }
@@ -1271,22 +665,17 @@ function recordApplicationEvent({
   status,
   details = "",
 }) {
-  const records =
-    readApplicationLog();
+  const records = readApplicationLog();
 
   records.push({
     vacancyReference:
-      normaliseVacancyReference(
-        vacancyReference
-      ),
+      normaliseVacancyReference(vacancyReference),
 
     vacancyTitle:
-      vacancyTitle ||
-      "",
+      vacancyTitle || "",
 
     employerName:
-      employerName ||
-      "",
+      employerName || "",
 
     status,
 
@@ -1296,22 +685,12 @@ function recordApplicationEvent({
       new Date().toISOString(),
   });
 
-  writeApplicationLog(
-    records
-  );
+  writeApplicationLog(records);
 }
 
-// ==================================================
-// FINAL SUBMISSION CONTROLS
-// ==================================================
-
-async function getFinalSubmissionControls(
-  page
-) {
+async function getFinalSubmissionControls(page) {
   const pageHeading =
-    page
-      .locator("h1")
-      .first();
+    page.locator("h1").first();
 
   await pageHeading.waitFor({
     state: "visible",
@@ -1349,20 +728,16 @@ async function getFinalSubmissionControls(
   const submissionSectionCount =
     await submissionSectionTexts.count();
 
-  if (
-    submissionSectionCount !==
-    1
-  ) {
+  if (submissionSectionCount !== 1) {
     throw new Error(
       `Expected exactly one visible "Submit your application" section label, but found ${submissionSectionCount}.`
     );
   }
 
-  const submissionSectionText =
-    submissionSectionTexts.first();
-
   if (
-    !(await submissionSectionText.isVisible())
+    !(await submissionSectionTexts
+      .first()
+      .isVisible())
   ) {
     throw new Error(
       '"Submit your application" section label exists but is not visible.'
@@ -1385,10 +760,7 @@ async function getFinalSubmissionControls(
   const acknowledgementCount =
     await acknowledgement.count();
 
-  if (
-    acknowledgementCount !==
-    1
-  ) {
+  if (acknowledgementCount !== 1) {
     throw new Error(
       `Expected exactly one final acknowledgement checkbox, but found ${acknowledgementCount}.`
     );
@@ -1413,9 +785,7 @@ async function getFinalSubmissionControls(
     page.getByRole(
       "button",
       {
-        name:
-          "Submit",
-
+        name: "Submit",
         exact: true,
       }
     );
@@ -1423,9 +793,7 @@ async function getFinalSubmissionControls(
   const submitCount =
     await submitButtons.count();
 
-  if (
-    submitCount !== 1
-  ) {
+  if (submitCount !== 1) {
     throw new Error(
       `Expected exactly one final Submit button, but found ${submitCount}.`
     );
@@ -1434,9 +802,7 @@ async function getFinalSubmissionControls(
   const submitButton =
     submitButtons.first();
 
-  if (
-    !(await submitButton.isVisible())
-  ) {
+  if (!(await submitButton.isVisible())) {
     throw new Error(
       "Final Submit button is not visible."
     );
@@ -1454,33 +820,21 @@ async function getFinalSubmissionControls(
   };
 }
 
-// ==================================================
-// VERIFY CONFIRMATION
-// ==================================================
+async function verifySubmissionConfirmation(page) {
+  const heading = normaliseText(
+    await page
+      .locator("h1")
+      .first()
+      .textContent()
+      .catch(() => "")
+  );
 
-async function verifySubmissionConfirmation(
-  page
-) {
-  const heading =
-    normaliseText(
-      await page
-        .locator("h1")
-        .first()
-        .textContent()
-        .catch(
-          () => ""
-        )
-    );
-
-  const bodyText =
-    normaliseText(
-      await page
-        .locator("body")
-        .textContent()
-        .catch(
-          () => ""
-        )
-    );
+  const bodyText = normaliseText(
+    await page
+      .locator("body")
+      .textContent()
+      .catch(() => "")
+  );
 
   const stillOnReviewPage =
     heading ===
@@ -1498,14 +852,9 @@ async function verifySubmissionConfirmation(
 
     heading,
 
-    url:
-      page.url(),
+    url: page.url(),
   };
 }
-
-// ==================================================
-// SUBMIT APPLICATION
-// ==================================================
 
 async function submitApplication({
   page,
@@ -1513,13 +862,9 @@ async function submitApplication({
   vacancy,
 }) {
   const existingRecord =
-    getSubmissionRecord(
-      vacancyReference
-    );
+    getSubmissionRecord(vacancyReference);
 
-  if (
-    existingRecord
-  ) {
+  if (existingRecord) {
     throw new Error(
       [
         `Automatic submission blocked for vacancy ${vacancyReference}.`,
@@ -1534,9 +879,7 @@ async function submitApplication({
     acknowledgement,
     submitButton,
   } =
-    await getFinalSubmissionControls(
-      page
-    );
+    await getFinalSubmissionControls(page);
 
   console.log(
     "\nFinal review/submission page verified."
@@ -1550,15 +893,11 @@ async function submitApplication({
     "Submit button verified."
   );
 
-  if (
-    !(await acknowledgement.isChecked())
-  ) {
+  if (!(await acknowledgement.isChecked())) {
     await acknowledgement.check();
   }
 
-  if (
-    !(await acknowledgement.isChecked())
-  ) {
+  if (!(await acknowledgement.isChecked())) {
     throw new Error(
       "Final acknowledgement checkbox could not be verified as checked."
     );
@@ -1594,18 +933,12 @@ async function submitApplication({
     .waitForLoadState(
       "domcontentloaded"
     )
-    .catch(
-      () => {}
-    );
+    .catch(() => {});
 
   const confirmation =
-    await verifySubmissionConfirmation(
-      page
-    );
+    await verifySubmissionConfirmation(page);
 
-  if (
-    !confirmation.confirmed
-  ) {
+  if (!confirmation.confirmed) {
     throw new Error(
       [
         "SUBMISSION STATUS UNKNOWN.",
@@ -1636,10 +969,6 @@ async function submitApplication({
   return confirmation;
 }
 
-// ==================================================
-// MAIN
-// ==================================================
-
 async function fillApplication(
   vacancyInput,
   {
@@ -1648,10 +977,6 @@ async function fillApplication(
     keepOpen = true,
   } = {}
 ) {
-  // ------------------------------------------------
-  // RESOLVE VACANCY
-  // ------------------------------------------------
-
   const resolved =
     await resolveVacancyInput(
       vacancyInput
@@ -1685,19 +1010,15 @@ async function fillApplication(
     `Employer: ${vacancy.employerName}`
   );
 
-  // ------------------------------------------------
-  // EARLY DUPLICATE PROTECTION
-  // ------------------------------------------------
-
+  // In submit mode, stop duplicates before opening a browser
+  // or generating answers.
   if (submit) {
     const existingRecord =
       getSubmissionRecord(
         vacancyReference
       );
 
-    if (
-      existingRecord
-    ) {
+    if (existingRecord) {
       console.log(
         `\nSkipping ${vacancyReference}: local log already contains "${existingRecord.status}".`
       );
@@ -1713,23 +1034,11 @@ async function fillApplication(
     }
   }
 
-  // ------------------------------------------------
-  // AUTH
-  // ------------------------------------------------
-
-  if (
-    !fs.existsSync(
-      AUTH_FILE
-    )
-  ) {
+  if (!fs.existsSync(AUTH_FILE)) {
     throw new Error(
       `Authentication file not found: ${AUTH_FILE}`
     );
   }
-
-  // ------------------------------------------------
-  // BROWSER
-  // ------------------------------------------------
 
   const browser =
     await chromium.launch({
@@ -1746,10 +1055,6 @@ async function fillApplication(
     await context.newPage();
 
   try {
-    // ================================================
-    // OPEN VACANCY
-    // ================================================
-
     console.log(
       "\nOpening GOV.UK vacancy..."
     );
@@ -1762,36 +1067,20 @@ async function fillApplication(
       }
     );
 
-    if (
-      await isSignedOut(
-        page
-      )
-    ) {
+    if (await isSignedOut(page)) {
       throw new Error(
         "GOV.UK session is signed out. Sign in manually and refresh the saved authentication state before continuing."
       );
     }
 
-    // ================================================
-    // APPLICATION CONTROL
-    // ================================================
-
     const applicationControl =
-      await getApplicationControl(
-        page
-      );
+      await getApplicationControl(page);
 
-    if (
-      !applicationControl
-    ) {
+    if (!applicationControl) {
       const externalApplication =
-        await getExternalApplication(
-          page
-        );
+        await getExternalApplication(page);
 
-      if (
-        externalApplication
-      ) {
+      if (externalApplication) {
         console.log(
           "\nExternal application detected."
         );
@@ -1814,6 +1103,78 @@ async function fillApplication(
         };
       }
 
+      const diagnosticTitle =
+        await page
+          .title()
+          .catch(() => "");
+
+      const diagnosticButtons =
+        await page
+          .getByRole("button")
+          .allTextContents()
+          .catch(() => []);
+
+      const diagnosticLinks =
+        await page
+          .getByRole("link")
+          .allTextContents()
+          .catch(() => []);
+
+      const diagnosticApplyText =
+        await page
+          .locator("#apply")
+          .first()
+          .innerText()
+          .catch(() => "");
+
+      console.log(
+        "\n========================================"
+      );
+
+      console.log(
+        "GOV.UK APPLICATION CONTROL DIAGNOSTIC"
+      );
+
+      console.log(
+        "========================================"
+      );
+
+      console.log(
+        `URL: ${page.url()}`
+      );
+
+      console.log(
+        `Title: ${diagnosticTitle}`
+      );
+
+      console.log(
+        "\nButtons:"
+      );
+
+      console.log(
+        diagnosticButtons
+      );
+
+      console.log(
+        "\nLinks:"
+      );
+
+      console.log(
+        diagnosticLinks
+      );
+
+      console.log(
+        "\n#apply section:"
+      );
+
+      console.log(
+        diagnosticApplyText
+      );
+
+      console.log(
+        "========================================"
+      );
+
       throw new Error(
         "Could not find a supported native GOV.UK application control."
       );
@@ -1829,17 +1190,11 @@ async function fillApplication(
       "domcontentloaded"
     );
 
-    // ================================================
-    // VERIFY NATIVE APPLICATION
-    // ================================================
-
     const currentUrl =
       page.url();
 
     const currentParsed =
-      new URL(
-        currentUrl
-      );
+      new URL(currentUrl);
 
     if (
       currentParsed.hostname !==
@@ -1857,28 +1212,16 @@ async function fillApplication(
     }
 
     const overviewUrl =
-      currentUrl.replace(
-        /\/$/,
-        ""
-      );
+      currentUrl.replace(/\/$/, "");
 
     console.log(
       "\nApplication overview opened."
     );
 
-    // ================================================
-    // DISCOVER QUESTIONS
-    // ================================================
-
     const questionLinks =
-      await getQuestionLinks(
-        page
-      );
+      await getQuestionLinks(page);
 
-    if (
-      questionLinks.length ===
-      0
-    ) {
+    if (questionLinks.length === 0) {
       throw new Error(
         "No written application questions were discovered."
       );
@@ -1887,10 +1230,6 @@ async function fillApplication(
     console.log(
       `Found ${questionLinks.length} written question(s).`
     );
-
-    // ================================================
-    // READ QUESTIONS
-    // ================================================
 
     const questions =
       await readQuestions({
@@ -1903,10 +1242,6 @@ async function fillApplication(
       overviewUrl,
     });
 
-    // ================================================
-    // GENERATE
-    // ================================================
-
     console.log(
       "\nGENERATING APPLICATION ANSWERS"
     );
@@ -1917,13 +1252,7 @@ async function fillApplication(
         vacancy,
       });
 
-    printPreview(
-      results
-    );
-
-    // ================================================
-    // GENERATOR GATE
-    // ================================================
+    printPreview(results);
 
     const generatorManualReviews =
       results.filter(
@@ -2006,10 +1335,6 @@ async function fillApplication(
       };
     }
 
-    // ================================================
-    // INDEPENDENT REVIEW
-    // ================================================
-
     console.log(
       "\nREVIEWING COMPLETE APPLICATION"
     );
@@ -2021,9 +1346,7 @@ async function fillApplication(
         vacancy,
       });
 
-    printReview(
-      review
-    );
+    printReview(review);
 
     if (
       review.applicationStatus !==
@@ -2081,10 +1404,6 @@ async function fillApplication(
       };
     }
 
-    // ================================================
-    // APPROVED
-    // ================================================
-
     console.log(
       "\n========================================"
     );
@@ -2108,10 +1427,6 @@ async function fillApplication(
     console.log(
       "Independent AI review: APPROVED"
     );
-
-    // ================================================
-    // FILL
-    // ================================================
 
     console.log(
       "\nFILLING APPROVED APPLICATION"
@@ -2146,10 +1461,6 @@ async function fillApplication(
       savedCount++;
     }
 
-    // ================================================
-    // RETURN TO OVERVIEW
-    // ================================================
-
     await returnToOverview({
       page,
       overviewUrl,
@@ -2164,10 +1475,6 @@ async function fillApplication(
       `\nSaved ${savedCount}/${results.length} written answers.`
     );
 
-    // ================================================
-    // PREVIEW
-    // ================================================
-
     console.log(
       "\nAdvancing from application overview..."
     );
@@ -2176,10 +1483,6 @@ async function fillApplication(
       page,
       overviewUrl,
     });
-
-    // ================================================
-    // FINAL CONTROLS
-    // ================================================
 
     const finalControls =
       await getFinalSubmissionControls(
@@ -2194,19 +1497,13 @@ async function fillApplication(
       'Final submission section verified: "Submit your application"'
     );
 
-    // ================================================
-    // DRY RUN
-    // ================================================
-
     if (!submit) {
       const isChecked =
         await finalControls
           .acknowledgement
           .isChecked();
 
-      if (
-        isChecked
-      ) {
+      if (isChecked) {
         throw new Error(
           [
             "Dry-run safety check failed.",
@@ -2271,10 +1568,6 @@ async function fillApplication(
         review,
       };
     }
-
-    // ================================================
-    // SUBMIT
-    // ================================================
 
     console.log(
       "\n========================================"
@@ -2357,10 +1650,6 @@ async function fillApplication(
       confirmation,
     };
   } catch (error) {
-    // ================================================
-    // ERROR
-    // ================================================
-
     console.error(
       "\n========================================"
     );
@@ -2379,20 +1668,12 @@ async function fillApplication(
 
     await printPageDiagnostics(
       page
-    ).catch(
-      () => {}
-    );
+    ).catch(() => {});
 
     await saveAuthStateIfSignedIn(
       context,
       page
-    ).catch(
-      () => {}
-    );
-
-    // ----------------------------------------------
-    // INTERACTIVE SINGLE-VACANCY MODE
-    // ----------------------------------------------
+    ).catch(() => {});
 
     if (interactive) {
       console.log(
@@ -2406,13 +1687,7 @@ async function fillApplication(
       await waitForEnter(
         "\nPress ENTER in this terminal when you are finished inspecting the browser..."
       );
-    }
-
-    // ----------------------------------------------
-    // UNATTENDED BULK MODE
-    // ----------------------------------------------
-
-    else {
+    } else {
       console.log(
         "\nUnattended mode: closing this vacancy and continuing with the bulk run."
       );
@@ -2423,35 +1698,23 @@ async function fillApplication(
     await saveAuthStateIfSignedIn(
       context,
       page
-    ).catch(
-      () => {}
-    );
+    ).catch(() => {});
 
     await browser.close();
   }
 }
 
-// ==================================================
-// COMMAND LINE
-// ==================================================
-
-if (
-  require.main === module
-) {
+if (require.main === module) {
   const args =
     process.argv.slice(2);
 
   const submit =
-    args.includes(
-      "--submit"
-    );
+    args.includes("--submit");
 
   const suppliedUrl =
     args.find(
       (arg) =>
-        !arg.startsWith(
-          "--"
-        )
+        !arg.startsWith("--")
     );
 
   const defaultVacancyUrl =
@@ -2462,11 +1725,7 @@ if (
     defaultVacancyUrl;
 
   console.log(
-    `Final submission enabled: ${
-      submit
-        ? "YES"
-        : "NO"
-    }`
+    `Final submission enabled: ${submit ? "YES" : "NO"}`
   );
 
   fillApplication(
@@ -2474,25 +1733,16 @@ if (
     {
       submit,
     }
-  ).catch(
-    (error) => {
-      console.error(
-        "\nGOV.UK application automation failed:"
-      );
+  ).catch((error) => {
+    console.error(
+      "\nGOV.UK application automation failed:"
+    );
 
-      console.error(
-        error
-      );
+    console.error(error);
 
-      process.exitCode =
-        1;
-    }
-  );
+    process.exitCode = 1;
+  });
 }
-
-// ==================================================
-// EXPORTS
-// ==================================================
 
 module.exports = {
   fillApplication,

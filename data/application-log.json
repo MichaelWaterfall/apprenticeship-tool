@@ -110,5 +110,885 @@
     "status": "submitted",
     "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/ccb42d57-9fb7-4411-a92e-5b0ee809eb44/application-submitted",
     "timestamp": "2026-09-30T21:23:53.677Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:30:11.786Z"
+  },
+  {
+    "vacancyReference": "1000270243",
+    "vacancyTitle": "Apprentice Maintenance Engineer",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/51c9c087-cede-4e70-984a-bb799e20df8e/application-submitted",
+    "timestamp": "2026-10-06T00:30:14.256Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:30:41.845Z"
+  },
+  {
+    "vacancyReference": "1000270245",
+    "vacancyTitle": "Apprentice Fabricator and Welder",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/8706d79c-15cb-4751-aa8b-84b4b279cccf/application-submitted",
+    "timestamp": "2026-10-06T00:30:44.203Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:31:17.285Z"
+  },
+  {
+    "vacancyReference": "1000270247",
+    "vacancyTitle": "Apprentice CNC Machine Operator",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/c22990a9-9ed6-45ff-be89-fe01f13a6732/application-submitted",
+    "timestamp": "2026-10-06T00:31:19.293Z"
+  },
+  {
+    "vacancyReference": "1000270253",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:31:47.187Z"
+  },
+  {
+    "vacancyReference": "1000270253",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/e8e26051-880e-4e4a-97d8-2260cad15290/application-submitted",
+    "timestamp": "2026-10-06T00:31:48.378Z"
+  },
+  {
+    "vacancyReference": "1000277643",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:32:15.596Z"
+  },
+  {
+    "vacancyReference": "1000277643",
+    "vacancyTitle": "Lean Manufacturing Apprentice",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/b568cd85-8d27-4dec-83e7-17b98a2de414/application-submitted",
+    "timestamp": "2026-10-06T00:32:17.468Z"
+  },
+  {
+    "vacancyReference": "1000285254",
+    "vacancyTitle": "Apprentice Tool Maker (Setter)",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:32:47.417Z"
+  },
+  {
+    "vacancyReference": "1000285254",
+    "vacancyTitle": "Apprentice Tool Maker (Setter)",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/9b2207c0-a927-42bb-81bc-d7b86d9a5d14/application-submitted",
+    "timestamp": "2026-10-06T00:32:49.310Z"
+  },
+  {
+    "vacancyReference": "2000013889",
+    "vacancyTitle": "Electrical / Mechanical Engineering Apprenticeship",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:33:46.124Z"
+  },
+  {
+    "vacancyReference": "2000013889",
+    "vacancyTitle": "Electrical / Mechanical Engineering Apprenticeship",
+    "employerName": "NORTH STAFFORDSHIRE ENGINEERING GROUP TRAINING ASSOCIATION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/259c8ae2-61ba-48ab-aa44-9a2e8ccd97bc/application-submitted",
+    "timestamp": "2026-10-06T00:33:48.190Z"
+  },
+  {
+    "vacancyReference": "2000045631",
+    "vacancyTitle": "Engineering Apprentice Toolmaker",
+    "employerName": "GESTAMP TALLENT LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:35:36.007Z"
+  },
+  {
+    "vacancyReference": "2000045631",
+    "vacancyTitle": "Engineering Apprentice Toolmaker",
+    "employerName": "GESTAMP TALLENT LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/4f474cf5-2ee8-4b9e-a2e9-e3a0474966ca/application-submitted",
+    "timestamp": "2026-10-06T00:35:36.887Z"
+  },
+  {
+    "vacancyReference": "2000047193",
+    "vacancyTitle": "Apprentice Multi-skilled Maintenance Technician",
+    "employerName": "NORTHWOOD HYGIENE PRODUCTS LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:36:38.841Z"
+  },
+  {
+    "vacancyReference": "2000047193",
+    "vacancyTitle": "Apprentice Multi-skilled Maintenance Technician",
+    "employerName": "NORTHWOOD HYGIENE PRODUCTS LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/231a3b19-0dc1-4688-9a4f-57e6153b5037/application-submitted",
+    "timestamp": "2026-10-06T00:36:40.895Z"
+  },
+  {
+    "vacancyReference": "2000049109",
+    "vacancyTitle": "Level 3 - Electrical Engineer Apprentice (Control Panel Building)",
+    "employerName": "INTERPANEL LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:37:53.194Z"
+  },
+  {
+    "vacancyReference": "2000049109",
+    "vacancyTitle": "Level 3 - Electrical Engineer Apprentice (Control Panel Building)",
+    "employerName": "INTERPANEL LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/520fed87-fd3f-48f3-900c-96bdf190246c/application-submitted",
+    "timestamp": "2026-10-06T00:37:54.844Z"
+  },
+  {
+    "vacancyReference": "2000049954",
+    "vacancyTitle": "Welder Apprentice",
+    "employerName": "RELIANT INSTALLATIONS LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:40:20.978Z"
+  },
+  {
+    "vacancyReference": "2000049954",
+    "vacancyTitle": "Welder Apprentice",
+    "employerName": "RELIANT INSTALLATIONS LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/e6ccd5bd-28c9-4e3c-b28c-8c0aa4d61504/application-submitted",
+    "timestamp": "2026-10-06T00:40:22.203Z"
+  },
+  {
+    "vacancyReference": "2000051430",
+    "vacancyTitle": "3 AI support & productivity technician Apprentice",
+    "employerName": "OPENDA LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:41:42.003Z"
+  },
+  {
+    "vacancyReference": "2000051430",
+    "vacancyTitle": "3 AI support & productivity technician Apprentice",
+    "employerName": "OPENDA LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/2ab34b1d-5425-4a4c-a887-7ccb53437123/application-submitted",
+    "timestamp": "2026-10-06T00:41:44.788Z"
+  },
+  {
+    "vacancyReference": "2000051052",
+    "vacancyTitle": "CNC Machinist Level 3 apprenticeship",
+    "employerName": "INTEGRATED WATER SERVICES LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:42:20.772Z"
+  },
+  {
+    "vacancyReference": "2000051052",
+    "vacancyTitle": "CNC Machinist Level 3 apprenticeship",
+    "employerName": "INTEGRATED WATER SERVICES LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/736b6421-c5f2-4321-92c6-1d9d5eb3b331/application-submitted",
+    "timestamp": "2026-10-06T00:42:22.628Z"
+  },
+  {
+    "vacancyReference": "2000037275",
+    "vacancyTitle": "Level 3 Machining Technician Apprentice",
+    "employerName": "GATEWAY ELECTRONIC COMPONENTS LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:43:20.522Z"
+  },
+  {
+    "vacancyReference": "2000037275",
+    "vacancyTitle": "Level 3 Machining Technician Apprentice",
+    "employerName": "GATEWAY ELECTRONIC COMPONENTS LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/7450ecce-0543-4505-890a-0e2b40107ab8/application-submitted",
+    "timestamp": "2026-10-06T00:43:21.489Z"
+  },
+  {
+    "vacancyReference": "2000049288",
+    "vacancyTitle": "Welding Apprentice",
+    "employerName": "WREKIN SHEETMETAL LTD ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:45:58.892Z"
+  },
+  {
+    "vacancyReference": "2000049288",
+    "vacancyTitle": "Welding Apprentice",
+    "employerName": "WREKIN SHEETMETAL LTD ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/b7fd827d-16ab-40d4-8c69-b1a7098a897f/application-submitted",
+    "timestamp": "2026-10-06T00:46:00.513Z"
+  },
+  {
+    "vacancyReference": "2000053081",
+    "vacancyTitle": "Specialist Material Manufacturing Apprentice",
+    "employerName": "MSA FOAMS LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:47:21.753Z"
+  },
+  {
+    "vacancyReference": "2000053081",
+    "vacancyTitle": "Specialist Material Manufacturing Apprentice",
+    "employerName": "MSA FOAMS LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/da9dee50-1165-473d-bfc8-1e8ce40a2883/application-submitted",
+    "timestamp": "2026-10-06T00:47:22.912Z"
+  },
+  {
+    "vacancyReference": "2000053150",
+    "vacancyTitle": "Machining Apprentice",
+    "employerName": "1860 GEL LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:48:02.641Z"
+  },
+  {
+    "vacancyReference": "2000053150",
+    "vacancyTitle": "Machining Apprentice",
+    "employerName": "1860 GEL LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/7ce0d6f7-247b-4cc8-94d2-c35a9c8ef654/application-submitted",
+    "timestamp": "2026-10-06T00:48:03.685Z"
+  },
+  {
+    "vacancyReference": "2000053146",
+    "vacancyTitle": "Engineering Operative Apprentice",
+    "employerName": "MPSE INSTINCT LTD ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:48:29.061Z"
+  },
+  {
+    "vacancyReference": "2000053146",
+    "vacancyTitle": "Engineering Operative Apprentice",
+    "employerName": "MPSE INSTINCT LTD ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/77a6d92e-7d80-408d-837e-4dfccc8f6db2/application-submitted",
+    "timestamp": "2026-10-06T00:48:29.995Z"
+  },
+  {
+    "vacancyReference": "2000053156",
+    "vacancyTitle": "Engineering Operative Apprentice",
+    "employerName": "BEP Surface Technologies",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:48:57.904Z"
+  },
+  {
+    "vacancyReference": "2000053156",
+    "vacancyTitle": "Engineering Operative Apprentice",
+    "employerName": "BEP Surface Technologies",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/073dc0c4-01cb-4bcf-a937-a597a202c62a/application-submitted",
+    "timestamp": "2026-10-06T00:48:59.176Z"
+  },
+  {
+    "vacancyReference": "2000053249",
+    "vacancyTitle": "Machining Apprentice",
+    "employerName": "DUNPHY COMBUSTION LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:49:50.420Z"
+  },
+  {
+    "vacancyReference": "2000053249",
+    "vacancyTitle": "Machining Apprentice",
+    "employerName": "DUNPHY COMBUSTION LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/05da997e-f0d3-432d-8a62-21f9bd02812a/application-submitted",
+    "timestamp": "2026-10-06T00:49:51.133Z"
+  },
+  {
+    "vacancyReference": "2000053243",
+    "vacancyTitle": "Multiskilled Engineering Operative Apprentice",
+    "employerName": "ROCHDALE TRAINING ASSOCIATION LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:50:21.792Z"
+  },
+  {
+    "vacancyReference": "2000053243",
+    "vacancyTitle": "Multiskilled Engineering Operative Apprentice",
+    "employerName": "ROCHDALE TRAINING ASSOCIATION LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/bba43d7f-931d-46ab-b742-3deb22a30aea/application-submitted",
+    "timestamp": "2026-10-06T00:50:22.725Z"
+  },
+  {
+    "vacancyReference": "2000052268",
+    "vacancyTitle": "Apprentice Electrical Calibration Engineer",
+    "employerName": "CMR Northern Limited",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:51:12.976Z"
+  },
+  {
+    "vacancyReference": "2000052268",
+    "vacancyTitle": "Apprentice Electrical Calibration Engineer",
+    "employerName": "CMR Northern Limited",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/f5a5a4a3-d061-462a-8713-881b8243bcaa/application-submitted",
+    "timestamp": "2026-10-06T00:51:14.954Z"
+  },
+  {
+    "vacancyReference": "2000053466",
+    "vacancyTitle": "Production Apprentice",
+    "employerName": "Woodware Repetitions Ltd",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:52:48.675Z"
+  },
+  {
+    "vacancyReference": "2000053466",
+    "vacancyTitle": "Production Apprentice",
+    "employerName": "Woodware Repetitions Ltd",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/257544ce-fff1-4a8b-b98b-3145781918b5/application-submitted",
+    "timestamp": "2026-10-06T00:52:50.176Z"
+  },
+  {
+    "vacancyReference": "2000053723",
+    "vacancyTitle": "Apprentice Welder/Fabricator",
+    "employerName": "JACK NICHOLAS GROUP LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:54:09.931Z"
+  },
+  {
+    "vacancyReference": "2000053723",
+    "vacancyTitle": "Apprentice Welder/Fabricator",
+    "employerName": "JACK NICHOLAS GROUP LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/418b6fb1-1eb4-4ab1-918d-b4c93bf5bfc6/application-submitted",
+    "timestamp": "2026-10-06T00:54:10.744Z"
+  },
+  {
+    "vacancyReference": "2000053985",
+    "vacancyTitle": "Apprentice Metal Spinner - engineering operative",
+    "employerName": "WINWARD ENGINEERING LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:56:01.662Z"
+  },
+  {
+    "vacancyReference": "2000053985",
+    "vacancyTitle": "Apprentice Metal Spinner - engineering operative",
+    "employerName": "WINWARD ENGINEERING LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/5feaa3cb-b076-43c7-83e9-c84114d4085f/application-submitted",
+    "timestamp": "2026-10-06T00:56:03.348Z"
+  },
+  {
+    "vacancyReference": "2000054056",
+    "vacancyTitle": "L4 AI & Automation Apprentice",
+    "employerName": "BUSINESSMOVERS.TECH LIMITED ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:57:08.906Z"
+  },
+  {
+    "vacancyReference": "2000054056",
+    "vacancyTitle": "L4 AI & Automation Apprentice",
+    "employerName": "BUSINESSMOVERS.TECH LIMITED ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/a4a12838-24a8-400c-b869-ebc4a82f7ac8/application-submitted",
+    "timestamp": "2026-10-06T00:57:09.696Z"
+  },
+  {
+    "vacancyReference": "2000054663",
+    "vacancyTitle": "Blind Manufacturing and Production Apprentice",
+    "employerName": "FRO BLINDS LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T00:59:45.373Z"
+  },
+  {
+    "vacancyReference": "2000054663",
+    "vacancyTitle": "Blind Manufacturing and Production Apprentice",
+    "employerName": "FRO BLINDS LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/c6dec391-990e-4598-a6c8-59d298e999bc/application-submitted",
+    "timestamp": "2026-10-06T00:59:46.288Z"
+  },
+  {
+    "vacancyReference": "2000054904",
+    "vacancyTitle": "Mechanical Engineering Apprentice",
+    "employerName": "CROFT INDUSTRIAL BOILERS SERVICES LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:01:25.902Z"
+  },
+  {
+    "vacancyReference": "2000054904",
+    "vacancyTitle": "Mechanical Engineering Apprentice",
+    "employerName": "CROFT INDUSTRIAL BOILERS SERVICES LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/415de40a-40f9-4dd4-b2e2-c3dac42499ae/application-submitted",
+    "timestamp": "2026-10-06T01:01:26.956Z"
+  },
+  {
+    "vacancyReference": "2000055339",
+    "vacancyTitle": "Level 2 - Sheet Metal Engineering Apprenticeship",
+    "employerName": "ADVANCED SHEET METAL ENGINEERING LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:05:50.979Z"
+  },
+  {
+    "vacancyReference": "2000055339",
+    "vacancyTitle": "Level 2 - Sheet Metal Engineering Apprenticeship",
+    "employerName": "ADVANCED SHEET METAL ENGINEERING LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/5cb080ea-5319-4b7b-827a-4372e937deb2/application-submitted",
+    "timestamp": "2026-10-06T01:05:51.829Z"
+  },
+  {
+    "vacancyReference": "2000054465",
+    "vacancyTitle": "Apprentice Industrial Radiographer",
+    "employerName": "WILLIAM COOK CAST PRODUCTS LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:06:43.263Z"
+  },
+  {
+    "vacancyReference": "2000054465",
+    "vacancyTitle": "Apprentice Industrial Radiographer",
+    "employerName": "WILLIAM COOK CAST PRODUCTS LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/8c35abca-10b6-4710-924f-5878d158c295/application-submitted",
+    "timestamp": "2026-10-06T01:06:44.005Z"
+  },
+  {
+    "vacancyReference": "2000055564",
+    "vacancyTitle": "Production Engineer Apprentice",
+    "employerName": "PRP OPTOELECTRONICS LIMITED ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:07:30.346Z"
+  },
+  {
+    "vacancyReference": "2000055564",
+    "vacancyTitle": "Production Engineer Apprentice",
+    "employerName": "PRP OPTOELECTRONICS LIMITED ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/b7c5f686-a134-406e-b8d7-d812420a618a/application-submitted",
+    "timestamp": "2026-10-06T01:07:31.225Z"
+  },
+  {
+    "vacancyReference": "2000055738",
+    "vacancyTitle": "Apprentice Trainee Installation Technician",
+    "employerName": "CUSTODIAN TOTAL SECURITY SERVICES LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:09:23.322Z"
+  },
+  {
+    "vacancyReference": "2000055738",
+    "vacancyTitle": "Apprentice Trainee Installation Technician",
+    "employerName": "CUSTODIAN TOTAL SECURITY SERVICES LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/bdaf5a42-4fbe-42e1-8187-cbf1692a7804/application-submitted",
+    "timestamp": "2026-10-06T01:09:24.222Z"
+  },
+  {
+    "vacancyReference": "2000055773",
+    "vacancyTitle": "Electrical Testing Apprentice",
+    "employerName": "PROJECT SOLVER LTD ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:10:22.919Z"
+  },
+  {
+    "vacancyReference": "2000055773",
+    "vacancyTitle": "Electrical Testing Apprentice",
+    "employerName": "PROJECT SOLVER LTD ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/27559276-43e0-484d-8bfa-b5644d716a9c/application-submitted",
+    "timestamp": "2026-10-06T01:10:24.104Z"
+  },
+  {
+    "vacancyReference": "2000055791",
+    "vacancyTitle": "Data & AI Apprentice - Hove",
+    "employerName": "INVOLVE SELECTION LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:10:54.457Z"
+  },
+  {
+    "vacancyReference": "2000055791",
+    "vacancyTitle": "Data & AI Apprentice - Hove",
+    "employerName": "INVOLVE SELECTION LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/36cff811-8001-4b06-9395-3c3891b9c9a5/application-submitted",
+    "timestamp": "2026-10-06T01:10:55.351Z"
+  },
+  {
+    "vacancyReference": "2000055818",
+    "vacancyTitle": "Fabricating Apprenticeship",
+    "employerName": "Flair Windows",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:11:25.297Z"
+  },
+  {
+    "vacancyReference": "2000055818",
+    "vacancyTitle": "Fabricating Apprenticeship",
+    "employerName": "Flair Windows",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/a65a30b6-09a1-4a41-bd39-487fd6957ade/application-submitted",
+    "timestamp": "2026-10-06T01:11:26.292Z"
+  },
+  {
+    "vacancyReference": "2000055543",
+    "vacancyTitle": "Mechatronics Maintenance Technician Apprenticeship",
+    "employerName": "WH Scott Group",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:13:12.211Z"
+  },
+  {
+    "vacancyReference": "2000055543",
+    "vacancyTitle": "Mechatronics Maintenance Technician Apprenticeship",
+    "employerName": "WH Scott Group",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/2c501dc7-70fb-4a63-8bfb-b76e865a314f/application-submitted",
+    "timestamp": "2026-10-06T01:13:13.642Z"
+  },
+  {
+    "vacancyReference": "2000056243",
+    "vacancyTitle": "Apprentice Plastic Fabricator - Ref 15004",
+    "employerName": "SEL ENVIRONMENTAL LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:16:17.417Z"
+  },
+  {
+    "vacancyReference": "2000056243",
+    "vacancyTitle": "Apprentice Plastic Fabricator - Ref 15004",
+    "employerName": "SEL ENVIRONMENTAL LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/cd5ddef7-84ef-4972-8077-df9bc1e1deef/application-submitted",
+    "timestamp": "2026-10-06T01:16:18.298Z"
+  },
+  {
+    "vacancyReference": "2000056276",
+    "vacancyTitle": "Apprentice Product Design & Manufacturing Engineer",
+    "employerName": "HICI LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:17:02.450Z"
+  },
+  {
+    "vacancyReference": "2000056276",
+    "vacancyTitle": "Apprentice Product Design & Manufacturing Engineer",
+    "employerName": "HICI LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/93bad8f4-fce6-440c-b8d2-25a5732ca709/application-submitted",
+    "timestamp": "2026-10-06T01:17:03.507Z"
+  },
+  {
+    "vacancyReference": "2000056367",
+    "vacancyTitle": "Level 3 Engineering Machining technician Apprentice",
+    "employerName": "SALCO PRECISION ENGINEERING LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:18:07.745Z"
+  },
+  {
+    "vacancyReference": "2000056367",
+    "vacancyTitle": "Level 3 Engineering Machining technician Apprentice",
+    "employerName": "SALCO PRECISION ENGINEERING LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/65107250-35a9-47b6-9925-c399dd75327a/application-submitted",
+    "timestamp": "2026-10-06T01:18:08.561Z"
+  },
+  {
+    "vacancyReference": "2000056410",
+    "vacancyTitle": "Manufacturing Apprentice",
+    "employerName": "THE SFS MANUFACTURING GROUP LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:23:09.396Z"
+  },
+  {
+    "vacancyReference": "2000056410",
+    "vacancyTitle": "Manufacturing Apprentice",
+    "employerName": "THE SFS MANUFACTURING GROUP LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/984bf64f-6248-487e-9bf2-9ac9e3823706/application-submitted",
+    "timestamp": "2026-10-06T01:23:10.049Z"
+  },
+  {
+    "vacancyReference": "2000056783",
+    "vacancyTitle": "Apprentice Fire & Security Installation Technician",
+    "employerName": "PYROCEL LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:23:49.977Z"
+  },
+  {
+    "vacancyReference": "2000056783",
+    "vacancyTitle": "Apprentice Fire & Security Installation Technician",
+    "employerName": "PYROCEL LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/8a7613ab-258a-4de6-9e03-58d3b50e8308/application-submitted",
+    "timestamp": "2026-10-06T01:23:50.920Z"
+  },
+  {
+    "vacancyReference": "2000057021",
+    "vacancyTitle": "Maintenance Engineer Apprentice",
+    "employerName": "LIMBS & THINGS LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:26:37.855Z"
+  },
+  {
+    "vacancyReference": "2000057021",
+    "vacancyTitle": "Maintenance Engineer Apprentice",
+    "employerName": "LIMBS & THINGS LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/dd862dc6-ecd2-4bf8-b25d-54f50e64b89f/application-submitted",
+    "timestamp": "2026-10-06T01:26:38.976Z"
+  },
+  {
+    "vacancyReference": "2000057087",
+    "vacancyTitle": "Garage Door Installer Apprentice",
+    "employerName": "MB GARAGE DOORS NE LIMITED ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:27:44.685Z"
+  },
+  {
+    "vacancyReference": "2000057087",
+    "vacancyTitle": "Garage Door Installer Apprentice",
+    "employerName": "MB GARAGE DOORS NE LIMITED ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/8a23f2d0-2088-4a32-a8e9-a64737258469/application-submitted",
+    "timestamp": "2026-10-06T01:27:45.717Z"
+  },
+  {
+    "vacancyReference": "2000057186",
+    "vacancyTitle": "Stores/Warehouse Apprentice",
+    "employerName": "Velux Commercial",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:29:01.207Z"
+  },
+  {
+    "vacancyReference": "2000057186",
+    "vacancyTitle": "Stores/Warehouse Apprentice",
+    "employerName": "Velux Commercial",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/6601542e-4a61-44b0-a5f2-20b73edd19b2/application-submitted",
+    "timestamp": "2026-10-06T01:29:02.278Z"
+  },
+  {
+    "vacancyReference": "2000057441",
+    "vacancyTitle": "Apprentice Services Team Assistant",
+    "employerName": "CEDARMORE HOUSING ASSOCIATION LTD(MR BAREHAM)",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-06T01:33:02.458Z"
+  },
+  {
+    "vacancyReference": "2000057441",
+    "vacancyTitle": "Apprentice Services Team Assistant",
+    "employerName": "CEDARMORE HOUSING ASSOCIATION LTD(MR BAREHAM)",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/fc6dafa2-c889-4fa1-8320-a89d1ac242be/application-submitted",
+    "timestamp": "2026-10-06T01:33:03.416Z"
+  },
+  {
+    "vacancyReference": "2000051366",
+    "vacancyTitle": "Engineering Fitter Apprentice",
+    "employerName": "MEC COM LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:08:36.345Z"
+  },
+  {
+    "vacancyReference": "2000051366",
+    "vacancyTitle": "Engineering Fitter Apprentice",
+    "employerName": "MEC COM LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/736676c6-59c3-470f-92cc-b42590c78710/application-submitted",
+    "timestamp": "2026-10-10T09:08:36.925Z"
+  },
+  {
+    "vacancyReference": "2000053128",
+    "vacancyTitle": "Engineering Fitter Apprentice",
+    "employerName": "Ken Mills Engineering Ltd",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:11:35.242Z"
+  },
+  {
+    "vacancyReference": "2000053128",
+    "vacancyTitle": "Engineering Fitter Apprentice",
+    "employerName": "Ken Mills Engineering Ltd",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/6e0a356d-e16c-4c31-b763-25ce6dc01570/application-submitted",
+    "timestamp": "2026-10-10T09:11:35.873Z"
+  },
+  {
+    "vacancyReference": "2000053422",
+    "vacancyTitle": "Manufacturing Apprenticeship",
+    "employerName": "ABRA-BOND LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:12:49.168Z"
+  },
+  {
+    "vacancyReference": "2000053422",
+    "vacancyTitle": "Manufacturing Apprenticeship",
+    "employerName": "ABRA-BOND LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/69d6187d-0693-4a6b-8407-232df308e326/application-submitted",
+    "timestamp": "2026-10-10T09:12:49.916Z"
+  },
+  {
+    "vacancyReference": "2000054664",
+    "vacancyTitle": "AD Plant Engineering Apprentice",
+    "employerName": "Pickstock Telford Ltd",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:16:41.644Z"
+  },
+  {
+    "vacancyReference": "2000054664",
+    "vacancyTitle": "AD Plant Engineering Apprentice",
+    "employerName": "Pickstock Telford Ltd",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/43c5282a-5c97-4e36-9c89-df46a62a2520/application-submitted",
+    "timestamp": "2026-10-10T09:16:42.416Z"
+  },
+  {
+    "vacancyReference": "2000054666",
+    "vacancyTitle": "Food and Drink Engineering maintenance apprentice",
+    "employerName": "Telford College",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:19:09.810Z"
+  },
+  {
+    "vacancyReference": "2000054666",
+    "vacancyTitle": "Food and Drink Engineering maintenance apprentice",
+    "employerName": "Telford College",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/a4d2e10d-2d4f-40bb-b592-c9f1537d0460/application-submitted",
+    "timestamp": "2026-10-10T09:19:10.525Z"
+  },
+  {
+    "vacancyReference": "2000055316",
+    "vacancyTitle": "Groundworker Level 2 Apprenticeship",
+    "employerName": "CARLTON (CIVIL ENGINEERING) LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:21:08.456Z"
+  },
+  {
+    "vacancyReference": "2000055316",
+    "vacancyTitle": "Groundworker Level 2 Apprenticeship",
+    "employerName": "CARLTON (CIVIL ENGINEERING) LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/37c6039f-7e1a-42d5-a730-69caf0512efc/application-submitted",
+    "timestamp": "2026-10-10T09:21:09.364Z"
+  },
+  {
+    "vacancyReference": "2000055317",
+    "vacancyTitle": "Groundworker Level 2 Apprenticeship",
+    "employerName": "AEROPARK DEVELOPMENTS  LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:21:33.271Z"
+  },
+  {
+    "vacancyReference": "2000055317",
+    "vacancyTitle": "Groundworker Level 2 Apprenticeship",
+    "employerName": "AEROPARK DEVELOPMENTS  LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/73b8071d-d3df-4819-a3f5-59ae7c934da1/application-submitted",
+    "timestamp": "2026-10-10T09:21:34.096Z"
+  },
+  {
+    "vacancyReference": "2000055117",
+    "vacancyTitle": "Groundworker Apprentice",
+    "employerName": "SUTTLE PROJECTS LTD ",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:28:26.267Z"
+  },
+  {
+    "vacancyReference": "2000055117",
+    "vacancyTitle": "Groundworker Apprentice",
+    "employerName": "SUTTLE PROJECTS LTD ",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/d9d551ef-6733-4979-9d6e-c0de39c5aefe/application-submitted",
+    "timestamp": "2026-10-10T09:28:27.440Z"
+  },
+  {
+    "vacancyReference": "2000056560",
+    "vacancyTitle": "Water Technician Apprenticeship",
+    "employerName": "T BROWN GROUP LIMITED",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:30:02.202Z"
+  },
+  {
+    "vacancyReference": "2000056560",
+    "vacancyTitle": "Water Technician Apprenticeship",
+    "employerName": "T BROWN GROUP LIMITED",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/5a19057e-840b-499a-b36d-332a0c29d517/application-submitted",
+    "timestamp": "2026-10-10T09:30:03.021Z"
+  },
+  {
+    "vacancyReference": "2000056432",
+    "vacancyTitle": "Assembly Technician Apprentice",
+    "employerName": "LEVEL DEVELOPMENTS LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-10T09:31:53.032Z"
+  },
+  {
+    "vacancyReference": "2000056432",
+    "vacancyTitle": "Assembly Technician Apprentice",
+    "employerName": "LEVEL DEVELOPMENTS LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/e3425e34-12bb-42b4-843a-69beadc4cf75/application-submitted",
+    "timestamp": "2026-10-10T09:31:53.694Z"
   }
 ]
