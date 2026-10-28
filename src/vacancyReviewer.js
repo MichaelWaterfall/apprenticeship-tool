@@ -55,6 +55,8 @@ The applicant wants apprenticeships genuinely centred on one or more of these ar
 - CNC
 - machining
 - welding
+- welding technician
+- metal fabrication
 - fabrication
 - building services engineering
 - BMS
@@ -86,8 +88,9 @@ The applicant wants apprenticeships genuinely centred on one or more of these ar
 - finance assistant and finance technician
 - tax technician
 - data analyst and data technician
-- business analyst
-- IT support and DevOps engineering
+- business analyst (genuine requirements gathering, process analysis, stakeholder work and systems improvement, not generic administration)
+- DevOps engineering, cloud infrastructure and technical IT engineering
+- IT support only when the duties involve meaningful technical troubleshooting, systems, networks, scripting or infrastructure rather than primarily call handling or basic customer service
 
 A keyword appearing incidentally is not enough.
 
