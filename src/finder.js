@@ -101,6 +101,39 @@ const careerKeywords = [
   "quality assurance",
   "test engineer",
   "test analyst",
+  // Accounting / finance / tax
+  "accountant",
+  "accountancy",
+  "accounting",
+  "accounts assistant",
+  "accounts apprentice",
+  "finance assistant",
+  "finance apprentice",
+  "finance technician",
+  "financial services",
+  "tax technician",
+  "tax apprentice",
+  "bookkeeping",
+  "bookkeeper",
+  "aat",
+
+  // Data / business analysis
+  "data analyst",
+  "data analysis",
+  "data technician",
+  "business analyst",
+  "business analysis",
+  "business intelligence",
+
+  // IT / infrastructure / DevOps
+  "it support",
+  "it technician",
+  "it service",
+  "infrastructure technician",
+  "devops",
+  "cloud engineer",
+  "network engineer",
+  "cyber security",
 ];
 
 // ==================================================
