@@ -44,6 +44,10 @@ const careerKeywords = [
   "fabricator",
   "welder",
   "welding",
+  "weld technician",
+  "welding technician",
+  "metal fabrication",
+  "fabrication and welding",
 
   // Building services / technical construction
   "building services",
@@ -110,7 +114,6 @@ const careerKeywords = [
   "finance assistant",
   "finance apprentice",
   "finance technician",
-  "financial services",
   "tax technician",
   "tax apprentice",
   "bookkeeping",
@@ -128,7 +131,6 @@ const careerKeywords = [
   // IT / infrastructure / DevOps
   "it support",
   "it technician",
-  "it service",
   "infrastructure technician",
   "devops",
   "cloud engineer",
