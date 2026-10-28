@@ -240,7 +240,7 @@ Examples that may qualify include:
 - engineering production;
 - technical manufacturing involving drawings, measurements, tolerances, machinery or engineering processes.
 
-Generic production, assembly, packing or factory-operative work is not automatically suitable.
+Generic production, assembly, packing or factory-operative work is not automatically suitable.\n\nDo NOT classify footwear production, garment production, textile production, product assembly or routine factory production as suitable merely because workers operate specialist machines, use digital cutters, inspect materials, reduce waste or follow quality standards. These are not automatically engineering careers. Require substantial transferable engineering content such as machine programming or setup, engineering drawings/tolerances, equipment maintenance, industrial automation, process engineering or an engineering-specific occupational standard. If the main outcome is making consumer products through routine production steps, mark UNSUITABLE unless the vacancy clearly establishes genuine engineering duties. Welding, fabrication, CNC machining, mechatronics and electrical engineering remain target careers.
 
 Always inspect the real duties.
 
