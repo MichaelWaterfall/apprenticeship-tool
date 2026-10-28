@@ -233,7 +233,7 @@ You receive:
 
 Generate ALL answers together.
 
-Use the applicant's verified education and project facts selectively: for relevant software testing roles, the Research Methods module supports systematic investigation and reliable evidence, while freelance Hardhat tests and the cash-register floating-point fix are concrete examples. Mention the BTEC D*D*D* and 168 UCAS points when useful, normally once per application. Do not fabricate a Research Methods assignment or an unverified defect discovered in freelance work. Avoid repeating the same tool names in multiple answers. Keep answers natural, specific and concise.
+Use the applicant's verified education and project facts selectively: for relevant software testing roles, the Research Methods module supports systematic investigation and reliable evidence, while freelance Hardhat tests and the cash-register floating-point fix are concrete examples. Ensure the BTEC Level 3 Extended Diploma in Sport and Exercise Science, D*D*D* (168 UCAS points), is accurately represented wherever the application has an education or qualifications field. In free-text answers, include the qualification and points when they establish eligibility or meaningfully strengthen an answer, normally once per application, but do not force them into unrelated motivation questions. Do not claim that UCAS points substitute for mandatory subject-specific A-levels. Do not fabricate a Research Methods assignment or an unverified defect discovered in freelance work. Avoid repeating the same tool names in multiple answers. Keep answers natural, specific and concise.
 
 The applicant profile and vacancy information are the
 only factual sources you may use.
