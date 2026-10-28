@@ -81,6 +81,13 @@ The applicant wants apprenticeships genuinely centred on one or more of these ar
 - QA / software quality assurance
 - test engineering
 - test analysis
+- accounting and accountancy
+- assistant accountant and accounting technician
+- finance assistant and finance technician
+- tax technician
+- data analyst and data technician
+- business analyst
+- IT support and DevOps engineering
 
 A keyword appearing incidentally is not enough.
 
@@ -665,7 +672,7 @@ For Lean Manufacturing, require the actual duties to establish genuine technical
 
 Check all explicit essential requirements against the verified profile.
 
-Treat education.aLevels = [] as explicit confirmation that the applicant has no A levels.
+Treat education.aLevels = [] as explicit confirmation that the applicant has no A levels. The applicant does hold a BTEC Level 3 Extended Diploma in Sport and Exercise Science at D*D*D* (168 UCAS tariff points). Where a vacancy explicitly accepts equivalent Level 3 qualifications or a UCAS tariff threshold, evaluate the BTEC accordingly. Never equate UCAS points with a specific A-level subject requirement; if the advert is ambiguous about BTEC equivalence, return manual_review.
 
 Treat distance as acceptable because the applicant can travel where necessary and is willing to relocate.
 
