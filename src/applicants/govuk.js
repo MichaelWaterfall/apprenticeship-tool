@@ -1175,9 +1175,20 @@ async function fillApplication(
         "========================================"
       );
 
-      throw new Error(
-        "Could not find a supported native GOV.UK application control."
+      // A vacancy can have an unsupported application method or a changed
+      // GOV.UK layout. Do not turn that into a recurring bulk-run error.
+      // No application has been submitted or filled in this branch.
+      console.log(
+        "\\nNo supported native or recognised external application control."
       );
+      console.log(
+        "Flagging this vacancy for manual application review."
+      );
+      return {
+        status: "manual_review",
+        stage: "unsupported_application_control",
+        vacancyReference,
+      };
     }
 
     console.log(
