@@ -62,7 +62,22 @@ const profile = {
       institution: "Exeter College",
 
       qualification:
-        "BTEC Level 3 Sport and Exercise Science",
+        "BTEC Level 3 Extended Diploma in Sport and Exercise Science",
+
+      ucasPoints: 168,
+
+      researchMethods: {
+        moduleStudied: true,
+        verifiedLearning: "Studied Research Methods, providing a foundation in systematic investigation and the importance of reliable evidence.",
+        uncertainty: "Exact assignments, experiments, and datasets are not remembered; do not invent any.",
+        relevance: {
+          softwareTesting: "Methodical test design, checking expected outcomes, investigating unexpected behaviour and evaluating evidence.",
+          softwareDevelopment: "Systematic problem solving and evaluating results.",
+          dataAnalysis: "Interpreting evidence, analysing information and checking reliability.",
+          accounting: "Accuracy, numeracy and careful examination of evidence.",
+          engineering: "Systematic investigation, fault finding and evaluation of results."
+        }
+      },
 
       grade: "D*D*D*",
 
@@ -452,22 +467,6 @@ const profile = {
     },
 
     {
-      name: "Library application",
-
-      technologies: [
-        "JavaScript",
-      ],
-
-      details: [
-        "Created a small library application",
-
-        "Used unique IDs for entries",
-
-        "Implemented functionality for removing entries",
-      ],
-    },
-
-    {
       name: "Tic-Tac-Toe",
 
       technologies: [
@@ -491,6 +490,17 @@ const profile = {
       ],
     },
 
+    {
+      name: "JavaScript cash register",
+      technologies: ["JavaScript", "HTML", "CSS"],
+      details: [
+        "Built a cash register change-calculation project",
+        "Identified inaccurate floating-point money calculations",
+        "Fixed calculations by converting amounts into integer cents",
+        "Tested multiple payment and change scenarios"
+      ],
+      safeUses: ["software testing", "software development", "problem solving", "attention to detail", "numeracy"]
+    },
     {
       name: "Arduino traffic light",
 
@@ -584,6 +594,9 @@ const profile = {
     "Software testing",
 
     "Quality assurance",
+    "Accounting",
+    "Finance",
+    "Data analysis",
   ],
 
   // --------------------------------------------------
@@ -592,6 +605,10 @@ const profile = {
 
   answerRules: {
     maximumWords: 300,
+
+    educationTailoringRule: "When relevant, state BTEC Level 3 Extended Diploma in Sport and Exercise Science, grade D*D*D* (168 UCAS points). Connect the verified Research Methods module to methodical investigation and evidence-based checking, especially for software testing and data roles. Do not pretend it is a computing qualification, do not claim A-levels, and do not invent a specific research assignment. Prioritise direct freelance testing examples over generic transferable skills. Avoid repeating the same BTEC details in multiple answers.",
+
+    softwareTestingTailoringRule: "For software tester roles, lead with verified Hardhat automated tests, wallet permissions, unauthorised interactions, edge cases and test coverage. Use the JavaScript cash-register floating-point bug fix as a concrete independent example. Mention TypeScript and Chai only if relevant and useful; do not repeat technology lists across answers. Do not claim a real-world defect was found in freelance contracts without evidence.",
 
     style: [
       "Write naturally in first person",
@@ -619,6 +636,10 @@ const profile = {
       "Do not invent employment",
 
       "Do not invent projects",
+
+      "Do not mention a library application or DOM grid project; these were not completed",
+
+      "Do not invent research experiments, collected data or specific Research Methods assignments",
 
       "Do not invent technical experience",
 
