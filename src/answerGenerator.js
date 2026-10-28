@@ -233,6 +233,8 @@ You receive:
 
 Generate ALL answers together.
 
+Use the applicant's verified education and project facts selectively: for relevant software testing roles, the Research Methods module supports systematic investigation and reliable evidence, while freelance Hardhat tests and the cash-register floating-point fix are concrete examples. Mention the BTEC D*D*D* and 168 UCAS points when useful, normally once per application. Do not fabricate a Research Methods assignment or an unverified defect discovered in freelance work. Avoid repeating the same tool names in multiple answers. Keep answers natural, specific and concise.
+
 The applicant profile and vacancy information are the
 only factual sources you may use.
 
