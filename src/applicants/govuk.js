@@ -121,7 +121,7 @@ async function getExternalApplication(page) {
 
     if (
       destination.hostname !== currentHost &&
-      /apply/i.test(text)
+      /\b(apply|application|register(?: your)? interest)\b/i.test(text)
     ) {
       return {
         type: "link",
