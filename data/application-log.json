@@ -990,5 +990,37 @@
     "status": "submitted",
     "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/e3425e34-12bb-42b4-843a-69beadc4cf75/application-submitted",
     "timestamp": "2026-10-10T09:31:53.694Z"
+  },
+  {
+    "vacancyReference": "2000036106",
+    "vacancyTitle": "Network Cable Installer Apprentice",
+    "employerName": "COMMUNICATION CABLING SERVICES LTD",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-17T21:43:42.338Z"
+  },
+  {
+    "vacancyReference": "2000036106",
+    "vacancyTitle": "Network Cable Installer Apprentice",
+    "employerName": "COMMUNICATION CABLING SERVICES LTD",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/f457f20c-5f82-497a-88f9-8f7181059732/application-submitted",
+    "timestamp": "2026-10-17T21:43:43.577Z"
+  },
+  {
+    "vacancyReference": "2000056071",
+    "vacancyTitle": "Production Process Apprentice",
+    "employerName": "Velux Commercial",
+    "status": "submission_attempted",
+    "details": "Final review page, acknowledgement and Submit button verified. Submit click about to be performed.",
+    "timestamp": "2026-10-17T22:00:41.889Z"
+  },
+  {
+    "vacancyReference": "2000056071",
+    "vacancyTitle": "Production Process Apprentice",
+    "employerName": "Velux Commercial",
+    "status": "submitted",
+    "details": "Submission confirmation detected at https://www.findapprenticeship.service.gov.uk/applications/caf7f5a4-d8fa-4590-b320-9fe85eeee2cf/application-submitted",
+    "timestamp": "2026-10-17T22:00:42.767Z"
   }
 ]
