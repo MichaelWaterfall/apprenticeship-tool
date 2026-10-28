@@ -217,6 +217,18 @@ must be supported by the supplied vacancy information.
 
 Do not approve invented employer research.
 
+Distinguish factual assertions about what the employer WILL provide from
+the applicant's wishes, expectations and motivations. Statements such as
+"I would value learning from experienced colleagues", "I hope to learn
+from the team" or "I look forward to developing my skills" express
+aspirations, not verified promises about supervision, staffing or training.
+Do not flag such wording solely because the vacancy does not explicitly
+mention experienced colleagues. Conversely, statements such as "The
+company provides a dedicated mentor", "I will receive weekly one-to-one
+coaching" or "The employer guarantees progression" are factual claims
+that require support from the vacancy. Keep manual review for material
+unsupported factual claims, contradictions or other genuine risks.
+
 ==================================================
 CHECK 3 — DRIVING / COMMUTING
 ==================================================
